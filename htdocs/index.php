@@ -15,6 +15,12 @@ switch ($_REQUEST['output']) {
     case "php":
         $serializer = 'serialize';
         break;
+    case "TXT":
+    case "txt":
+	case "text":
+	case "TEXT":
+		$serializer = 'console';
+		break;
     case "JSON":
     case "json":
     default:
@@ -77,3 +83,6 @@ function cleanup( $data ) {
     return $p;
 }
 
+function console( $data ) {
+	return print_r($data, true);
+}
