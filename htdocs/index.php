@@ -9,6 +9,18 @@ if (!isset($_REQUEST['module'])) {
     print "ERROR: debe indicar un modulo."; die;
 }
 
+$serializer = 'json_encode';
+switch ($_REQUEST['output']) {
+    case "PHP":
+    case "php":
+        $serializer = 'serialize';
+        break;
+    case "JSON":
+    case "json":
+    default:
+        $serializer = 'json_encode';
+}
+
 if ($env == "auto" or $env == "") {
     if (ini_get("dev_server")) {
         $env = "dev";
@@ -50,5 +62,6 @@ if ((is_array($res) and count($res) == 0) or !is_array($res)) {
 
 DataAccess::setDB($databases);
 $js = new JS($log, session_id());
-print json_encode($js->evaluateScript($res[0]["code"]));
+$data = $js->evaluateScript($res[0]["code"]);
+print $serializer($data);
 
