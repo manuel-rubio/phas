@@ -2,7 +2,7 @@
 
 header("Content-type: text/plain");
 
-include_once(__DIR__ . "/PHAS.php");
+include_once(__DIR__ . "/../lib/PHAS.php");
 include_once(__DIR__ . "/../conf/config.php");
 
 if (!isset($_REQUEST['module'])) {
