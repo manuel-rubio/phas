@@ -6,7 +6,7 @@ include_once(__DIR__ . "/../lib/PHAS.php");
 include_once(__DIR__ . "/../conf/config.php");
 
 if (!isset($_REQUEST['module'])) {
-    throw new Exception("ERROR: debe indicar un modulo.");
+    print "ERROR: debe indicar un modulo."; die;
 }
 
 if ($env == "auto" or $env == "") {
@@ -29,7 +29,9 @@ include_once(__DIR__ . "/../conf/$env/databases.php");
 $log = Log::factory('file', $logfile, 'PHAS');
 
 if (!isset($databases['main'])) {
-    throw new Exception("ERROR: entorno [$env] no valido.");
+    $msg = "ERROR: entorno [$env] no valido.";
+    $log->log($msg, PEAR_LOG_CRIT);
+    print $msg; die;
 } 
 
 $db_main = $databases['main'];
@@ -38,13 +40,15 @@ unset($databases['main']);
 DataAccess::setDB(array ( "main" => $db_main ));
 $module = $_REQUEST['module'];
 $main = new DataAccess("main");
-$res = $main->dql("SELECT code FROM phas_phas WHERE module = ?", array ( $module ));
+$res = $main->dql("SELECT code FROM phas_phas WHERE module = ? ORDER BY version DESC", array ( $module ));
 
 if ((is_array($res) and count($res) == 0) or !is_array($res)) {
-    throw new Exception("ERROR: modulo [$module] no encontrado");
+    $msg = "ERROR: modulo [$module] no encontrado";
+    $log->log($msg, PEAR_LOG_CRIT);
+    print $msg; die;
 }
 
 DataAccess::setDB($databases);
 $js = new JS($log, session_id());
-print $js->evaluateScript($res[0]["code"]);
+print json_encode($js->evaluateScript($res[0]["code"]));
 

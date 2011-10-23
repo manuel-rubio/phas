@@ -54,7 +54,7 @@ for (var i in monedas) {
 logger.log('resultado: ' + convs.toSource());
 logger.log('finalizado.', PEAR_LOG_INFO);
 
-convs.toSource();
+convs;
 EOF;
 
 $main->dml("INSERT INTO phas_phas( module, code, version, created_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'euros', $script, 0, date('Y-m-d H:i:s') ) ) );
