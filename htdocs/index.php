@@ -63,5 +63,17 @@ if ((is_array($res) and count($res) == 0) or !is_array($res)) {
 DataAccess::setDB($databases);
 $js = new JS($log, session_id());
 $data = $js->evaluateScript($res[0]["code"]);
-print $serializer($data);
+print $serializer(cleanup($data));
+
+function cleanup( $data ) {
+    $p = array();
+    if (is_object($data) or is_array($data)) {
+        foreach ($data as $k => $v) {
+            $p[$k] = cleanup($v);
+        }
+    } else {
+        $p = $data;
+    }
+    return $p;
+}
 
