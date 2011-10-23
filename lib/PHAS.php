@@ -6,4 +6,5 @@ include_once(__DIR__ . "/PHAS/SoapCli.php");
 include_once(__DIR__ . "/PHAS/DataAccess.php");
 include_once(__DIR__ . "/PHAS/Session.php");
 include_once(__DIR__ . "/PHAS/Request.php");
+include_once(__DIR__ . "/PHAS/HTTP.php");
 

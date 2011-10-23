@@ -1,6 +1,6 @@
 <?php
 
-include_once(__DIR__ . "/../src/PHAS.php");
+include_once(__DIR__ . "/../lib/PHAS.php");
 include_once(__DIR__ . "/../conf/config.php");
 include_once(__DIR__ . "/../conf/$env/config.php");
 include_once(__DIR__ . "/../conf/$env/databases.php");

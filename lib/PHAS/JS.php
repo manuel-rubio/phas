@@ -11,6 +11,12 @@ class JS {
 
         $js->registerClass('SoapCli');
         $js->registerClass('DataAccess');
+        $js->registerClass('HTTP');
+
+        $js->registerFunction('serialize', 'php_serialize');
+        $js->registerFunction('unserialize', 'php_unserialize');
+        $js->registerFunction('js_encode', 'json_serialize');
+        $js->registerFunction('js_decode', 'json_unserialize');
 
         $js->assign('logger', $log);
         $js->assign('PEAR_LOG_DEBUG', PEAR_LOG_DEBUG);
