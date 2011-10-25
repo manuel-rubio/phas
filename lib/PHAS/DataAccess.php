@@ -3,6 +3,17 @@
 class DataAccess {
     private $pdo;
     private static $databases;
+	private static $conn;
+	
+	public static function singleton( $name ) {
+		if (isset(self::$databases[$name])) {
+		 	if (!isset(self::$conn[$name])) {
+				self::$conn[$name] = new DataAccess($name);
+			}
+			return self::$conn[$name];
+		}
+		return false;
+	}
     public static function setDB( $databases ) {
         self::$databases = $databases;
     }

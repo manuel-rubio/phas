@@ -9,3 +9,8 @@ class Phas(models.Model):
     # en el momento de la creacion.
     created_at = models.DateTimeField(default=datetime.datetime.now(), blank=True)
 
+class BasesDeDatos(models.Model):
+	name = models.CharField(max_length=50, unique=True)
+	DSN = models.CharField(max_length=256)
+	USR = models.CharField(max_length=50, null=True, blank=True)
+	PWD = models.CharField(max_length=50, null=True, blank=True)
