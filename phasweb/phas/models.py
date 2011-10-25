@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from django import forms
 from django.db import models
 import datetime
 
@@ -10,7 +12,21 @@ class Phas(models.Model):
     created_at = models.DateTimeField(default=datetime.datetime.now(), blank=True)
 
 class BasesDeDatos(models.Model):
-	name = models.CharField(max_length=50, unique=True)
-	DSN = models.CharField(max_length=256)
-	USR = models.CharField(max_length=50, null=True, blank=True)
-	PWD = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(max_length=50, unique=True)
+    DSN = models.CharField(max_length=256)
+    USR = models.CharField(max_length=50, null=True, blank=True)
+    PWD = models.CharField(max_length=50, null=True, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+class BasesDeDatosForm(forms.ModelForm):
+    name = forms.CharField(label='Nombre')
+    USR = forms.CharField(label='Usuario')
+    PWD = forms.CharField(label='Clave')
+    class Meta:
+        model = BasesDeDatos
+
+class PhasForm(forms.ModelForm):
+    class Meta:
+        model = Phas

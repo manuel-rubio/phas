@@ -52,6 +52,10 @@ class PHAS {
             'php' => array (
                 'function' => 'serialize',
                 'type' => 'text/plain'
+            ),
+            'yaml' => array (
+                'function' => 'yaml_emit',
+                'type' => 'text/plain'
             )
         );
 	}

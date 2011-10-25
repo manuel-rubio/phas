@@ -10,16 +10,11 @@ $database = array (
 $phas = new PHAS();
 $phas->setOutputHandler('cv', 'cv_output');
 $phas->setOutputHandler('xml', 'xml_otuput', 'text/xml; charset=utf8');
-$phas->setOutputHandler('yaml', 'yaml_output');
 $phas->setOutputHandler('cbx', 'cbx_output', 'text/xml; charset=utf8');
 print $phas->run();
 
 function cbx_output( $data ) {
     return $data;
-}
-
-function yaml_output( $data ) {
-    return yaml_emit($data);
 }
 
 function cv_output( $data ) {

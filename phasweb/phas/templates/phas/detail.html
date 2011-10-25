@@ -1,0 +1,13 @@
+<h1>Base de datos</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/phasweb/database/{{ database.id }}/save/" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    <tr>
+        <td colspan="2"><input type="submit" value="modifica" /></td>
+    </tr>
+    </table>
+</form>

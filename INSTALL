@@ -56,3 +56,14 @@ extension=spidermonkey.so
 extension=memcached.so
 extension=yaml.so
 
+# Para configurar con Apache:
+
+<Location "/phasweb">
+    SetHandler python-program
+    PythonHandler django.core.handlers.modpython
+    SetEnv DJANGO_SETTINGS_MODULE phasweb.settings
+    PythonOption django.root /phasweb
+    PythonDebug on
+    PythonPath "['/var/www', '/var/www/phasweb'] + sys.path"
+</Location>
+
