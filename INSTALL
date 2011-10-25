@@ -1,0 +1,58 @@
+# Para instalar correctamente el sistema hay que compilar PHP 5.3.1,
+# con el siguiente comando de configure:
+
+'./configure' \
+'--prefix=/opt/php-5.3.1' \
+'--with-apxs2=/usr/bin/apxs2' \
+'--with-mssql=/usr' \
+'--with-pgsql=/usr' \
+'--with-mysql=/usr' \
+'--enable-soap' \
+'--with-pdo-dblib=/usr' \
+'--with-pdo-pgsql=/usr' \
+'--with-pdo-mysql=/usr' \
+'--with-gettext=/usr' \
+'--with-openssl' \
+'--with-zlib'
+
+# Además de instalar con PEAR los siguiente paquetes:
+
+# Actualizamos PEAR
+pear upgrade
+
+# PEAR::Log
+pear install Log
+
+# PHPUnit
+pear channel-discover pear.phpunit.de
+pear install --alldeps phpunit/PHPUnit
+
+# Y algunas extensiones de PECL
+
+# Sistema acelerador y de caché
+pecl install APC
+
+# Conector para Memcached
+apt-get install libmemcached-dev
+pecl install memcached
+
+# HttpRequest
+pecl install pecl_http
+
+# Intérprete de JavaScript (spidermonkey)
+apt-get install libmozjs-dev
+pecl install spidermonkey-0.1.4
+
+# Serializador YAML
+apt-get install libyaml-dev
+pecl install yaml
+
+# Esto requerirá de que se agregue en el fichero php.ini
+# las siguientes líneas:
+
+extension=apc.so
+extension=http.so
+extension=spidermonkey.so
+extension=memcached.so
+extension=yaml.so
+

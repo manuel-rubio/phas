@@ -18,14 +18,15 @@ function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 set_error_handler("exception_error_handler", E_USER_ERROR);
 
 class PHAS {
-	
+
 	private $request;
 	private $main;
-	
+	private $output_handlers;
+
 	public function __construct() {
 		global $log, $logfile, $database;
 		$this->request = new Request();
-		
+
 		if (isset($logfile)) {
 			$log = Log::factory('file', $logfile, 'PHAS');
 		} else {
@@ -36,12 +37,29 @@ class PHAS {
 		    $msg = "ERROR: entorno [$env] no valido.";
 		    $log->log($msg, PEAR_LOG_CRIT);
 		    print $msg; die;
-		} 
+		}
 		DataAccess::setDB(array ( "main" => $database ));
 		$this->main = DataAccess::singleton('main');
+		$this->output_handlers = array (
+            'json' => array (
+                'function' => 'json_encode',
+                'type' => 'application/json'
+            ),
+            'txt' => array (
+                'function' => 'console',
+                'type' => 'text/plain'
+            ),
+            'php' => array (
+                'function' => 'serialize',
+                'type' => 'text/plain'
+            )
+        );
 	}
 
 	public function run() {
+        if (isset($this->request->status)) {
+            return $this->getStatusInfo();
+        }
 		if (!isset($this->request->module)) {
 			print "Module not defined.";
 			return;
@@ -51,33 +69,36 @@ class PHAS {
 		$this->configureDB();
 		return $this->evaluate($code, $serializer);
 	}
-	
+
+	public function setOutputHandler( $name, $function, $type = 'text/plain' ) {
+        $this->output_handlers[$name] = array (
+            'function' => $function,
+            'type' => $type
+        );
+	}
+
+	public function getStatusInfo() {
+        $INFO = array (
+            "databases" => $this->configureDB(),
+            "output_handlers" => $this->output_handlers,
+            "codes" => $this->main->dql("SELECT module, MAX(version) AS version FROM phas_phas GROUP BY module")
+        );
+        include_once(__DIR__ . "/PHAS/Status.php");
+	}
+
 	private function checkOutput() {
 		if (isset($this->request->output)) {
-			switch ($this->request->output) {
-			    case "PHP":
-			    case "php":
-			        $serializer = 'serialize';
-					header("Content-type: text/plain");
-			        break;
-			    case "TXT":
-			    case "txt":
-				case "text":
-				case "TEXT":
-					$serializer = 'console';
-					header("Content-type: text/plain");
-					break;
-			    case "JSON":
-			    case "json":
-			    default:
-			        $serializer = 'json_encode';
-					header("Content-type: text/plain");
-			}
-		} else {
-	        $serializer = 'json_encode';
-			header("Content-type: text/plain");
-		}
-		return $serializer;
+            $output = $this->request->output;
+        } else {
+            $output = 'json';
+        }
+        if (isset($this->output_handlers[$output])) {
+            $output = $this->output_handlers[$output];
+        } else {
+            $output = $this->output_handlers['json'];
+        }
+        header("Content-type: {$output['type']}");
+        return $output['function'];
 	}
 
 	private function evaluate( $code, $serializer ) {
@@ -86,13 +107,13 @@ class PHAS {
 		$data = $js->evaluateScript($code);
 		return $serializer($this->cleanup($data));
 	}
-	
+
 	private function checkModule() {
 		$module = $this->request->module;
 		$res = $this->main->dql("
-			SELECT code 
-			FROM phas_phas 
-			WHERE module = ? 
+			SELECT code
+			FROM phas_phas
+			WHERE module = ?
 			ORDER BY version DESC
 		", array ( $module ));
 
@@ -120,6 +141,7 @@ class PHAS {
 			}
 		}
 		DataAccess::setDB($databases);
+		return $databases;
 	}
 
 	private function cleanup( $data ) {
