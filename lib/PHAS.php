@@ -104,7 +104,7 @@ class PHAS {
 		return $res[0]["code"];
 	}
 
-	private function configureDB() {
+	public function configureDB() {
 		$databases_raw = $this->main->dql("
 			SELECT *
 			FROM phas_basesdedatos

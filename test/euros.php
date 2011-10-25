@@ -1,20 +1,20 @@
 <?php
 
+chdir(__DIR__);
+
 include_once(__DIR__ . "/../lib/PHAS.php");
-include_once(__DIR__ . "/../conf/config.php");
-include_once(__DIR__ . "/../conf/$env/config.php");
-include_once(__DIR__ . "/../conf/$env/databases.php");
 
-if (!isset($databases['main'])) {
-    throw new Exception("ERROR: entorno [$env] no valido.");
-} 
+$logfile = __DIR__ . "/../phas.log";
+$database = array (
+	"DSN" => "sqlite:" . __DIR__ . "/../main.sqlite"
+);
 
-DataAccess::setDB($databases);
-$main = new DataAccess("main");
+DataAccess::setDB(array ( "main" => $database ));
+$main = DataAccess::singleton("main");
 
 $script = <<<EOF
 
-var spider = new DataAccess('spidermonkey');
+var spider = new DataAccess('euros');
 var monedas = spider.dql('SELECT * FROM monedas');
 
 var url = 'http://www.webservicex.net/CurrencyConvertor.asmx?WSDL';
@@ -57,5 +57,17 @@ logger.log('finalizado.', PEAR_LOG_INFO);
 convs;
 EOF;
 
-$main->dml("INSERT INTO phas_phas( module, code, version, created_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'euros', $script, 0, date('Y-m-d H:i:s') ) ) );
+$main->dml("INSERT INTO phas_phas( module, code, version, created_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'euros', $script, 1, date('Y-m-d H:i:s') ) ) );
 
+$main->dml("INSERT INTO phas_basesdedatos( name, DSN ) VALUES ( 'euros', 'sqlite:../euros.sqlite' )");
+
+$phas = new PHAS();
+$phas->configureDB();
+
+$euros = DataAccess::singleton('euros');
+$euros->dml("CREATE TABLE monedas ( moneda char(3) not null primary key ); ANALYZE TABLE monedas;");
+$euros->dml("CREATE TABLE valor_euro( moneda char(3) not null primary key, a_euros real not null, desde_euros real not null ); ANALYZE TABLE valor_euro;");
+
+$euros->dml("INSERT INTO monedas(moneda) VALUES (?)", array(
+	array ( 'USD' ), array ( 'GBP' ), array ( 'MXN' )
+));

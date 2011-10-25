@@ -19,7 +19,7 @@ class DataAccess {
     }
     public function __construct( $name ) {
         if (!isset(self::$databases[$name])) {
-            throw new Exception("database [$name] not found, only: " . array_keys(self::$databases));
+            throw new Exception("database [$name] not found, only: " . serialize(self::$databases));
         }
         $db = self::$databases[$name];
         if (preg_match("/^sqlite/", $db["DSN"])) {
