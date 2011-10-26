@@ -47,6 +47,9 @@ pecl install spidermonkey-0.1.4
 apt-get install libyaml-dev
 pecl install yaml
 
+# Enlace con MongoDB (para usar en clusters)
+pecl install mongo
+
 # Esto requerirá de que se agregue en el fichero php.ini
 # las siguientes líneas:
 
@@ -55,6 +58,7 @@ extension=http.so
 extension=spidermonkey.so
 extension=memcached.so
 extension=yaml.so
+extension=mongo.so
 
 # Para configurar con Apache:
 

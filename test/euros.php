@@ -6,7 +6,7 @@ include_once(__DIR__ . "/../lib/PHAS.php");
 
 $logfile = __DIR__ . "/../phas.log";
 $database = array (
-	"DSN" => "sqlite:" . __DIR__ . "/../main.sqlite"
+	"DSN" => "sqlite:/tmp/main.sqlite"
 );
 
 DataAccess::setDB(array ( "main" => $database ));

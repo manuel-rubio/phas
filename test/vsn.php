@@ -1,16 +1,16 @@
 <?php
 
+chdir(__DIR__);
+
 include_once(__DIR__ . "/../lib/PHAS.php");
-include_once(__DIR__ . "/../conf/config.php");
-include_once(__DIR__ . "/../conf/$env/config.php");
-include_once(__DIR__ . "/../conf/$env/databases.php");
 
-if (!isset($databases['main'])) {
-    throw new Exception("ERROR: entorno [$env] no valido.");
-} 
+$logfile = __DIR__ . "/../phas.log";
+$database = array (
+        "DSN" => "sqlite:/tmp/main.sqlite"
+);
 
-DataAccess::setDB($databases);
-$main = new DataAccess("main");
+DataAccess::setDB(array ( "main" => $database ));
+$main = DataAccess::singleton("main");
 
 $script = <<<EOF
 var http = new HTTP('http://erldev.org/browser/trunk/vsn.mk');

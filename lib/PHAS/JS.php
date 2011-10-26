@@ -4,9 +4,9 @@ class JS {
 
     private $js;
 
-    public function __construct( $log, $session_id = null ) {
+    public function __construct( Log $log, $session ) {
         $js = new JSContext();
-        $js->assign('session', new Session($session_id));
+        $js->assign('session', $session);
         $js->assign('request', new Request());
 
         $js->registerClass('SoapCli');
