@@ -3,8 +3,12 @@ from django import forms
 from django.db import models
 import datetime
 
+class Groups(models.Model):
+    group = models.CharField(max_length=50)
+
 class Phas(models.Model):
     module = models.CharField(max_length=50)
+    group = models.ForeignKey('Groups')
     code = models.TextField()
     version = models.IntegerField(default=0)
     # FIXME: datetime.now deberia de ser usado ya que datetime.now() se cambia por la fecha
@@ -30,3 +34,4 @@ class BasesDeDatosForm(forms.ModelForm):
 class PhasForm(forms.ModelForm):
     class Meta:
         model = Phas
+
