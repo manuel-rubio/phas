@@ -46,9 +46,14 @@
         <hr />
         <h3>Code</h3>
         <div id="funciones">
-            <?php foreach ($INFO['codes'] as $info) { ?>
-            <h5 id="funciones_<?=$info['module']?>-header" class="nohighlight"><?=$info['module']?> (version <?=$info['version']?>)</h5>
-            <div id="funciones_<?=$info['module']?>-content" class="scroll"></div>
+            <?php foreach ($INFO['groups'] as $info) { ?>
+            <h5 id="funciones_<?=$info['group']?>-header" class="nohighlight"><?=$info['group']?></h5>
+            <div id="funciones_<?=$info['module']?>-content" class="scroll">
+                <?php foreach ($INFO['codes'] as $codes) { if ($codes['group'] == $info['group']) { ?>
+                <h5 id="codes_<?=$codes['module']?>-header" class="nohighlight"><?=$codes['module']?> (<?=$codes['version']?>)</h5>
+                <div id="codes_<?=$codes['module']?>-content"></div>
+                <?php } } ?>
+            </div>
             <?php } ?>
         </div>
     </div>

@@ -4,7 +4,7 @@ class DataAccess {
     private $pdo;
     private static $databases;
 	private static $conn;
-	
+
 	public static function singleton( $name ) {
 		if (isset(self::$databases[$name])) {
 		 	if (!isset(self::$conn[$name])) {
@@ -65,12 +65,18 @@ class DataAccess {
             $p = $params;
         }
         $sth = $this->pdo->prepare($sql);
-        if (count($p) == 0) {
-            $sth->execute();
-        } else {
-            foreach ($p as $e) {
-                $sth->execute($e);
+        if ($sth) {
+            if (!is_array($params) or count($p) == 0) {
+                $sth->execute();
+            } else {
+                foreach ($p as $e) {
+                    $sth->execute($e);
+                }
             }
+        } else {
+            $errno = $this->pdo->errorCode();
+            $errtxt = $this->pdo->errorInfo();
+            throw new Exception("ERROR[$errno]: {$errtxt[2]}");
         }
     }
 }
