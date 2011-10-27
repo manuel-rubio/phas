@@ -1,0 +1,25 @@
+<a href="/group/new">Nueva</a>
+{% if databases %}
+	{% if has_prev %}
+		| <a href="/group/{{ prev_page }}/">P&aacute;g. Anterior</a>
+		{% if has_next %} | {% endif %}
+	{% endif %}
+	{% if has_next %}
+		<a href="/group/{{ next_page }}/">P&aacute;g. Siguiente</a>
+	{% endif %}
+    <table>
+		<tr>
+			<th>Grupo</th>
+			<th>Opciones</th>
+		</tr>
+    {% for group in groups %}
+        <tr>
+			<td>{{ group.group }}</td>
+			<td><a href="/group/{{ group.id }}/edit/">Edita</a>
+			<a href="/group/{{ group.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">Elimina</a></td>
+		</tr>
+    {% endfor %}
+    </table>
+{% else %}
+    <p>No hay bases de datos configuradas.</p>
+{% endif %}

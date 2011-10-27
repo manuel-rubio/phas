@@ -1,0 +1,20 @@
+<h1>Base de datos</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% if database.id == None %}
+<form action="/database/new/" method="post">
+{% else %}
+<form action="/database/{{ database.id }}/edit/" method="post">
+{% endif %}
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    <tr>
+        <td colspan="2">
+			<input type="submit" value="{{ button }}" />
+			<input type="button" value="volver" onclick="location.href='/database/';" />
+			<input type="button" value="elimina" onclick="location.href='/database/{{ database.id }}/delete/';">
+		</td>
+    </tr>
+    </table>
+</form>

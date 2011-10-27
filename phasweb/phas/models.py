@@ -26,10 +26,15 @@ class Databases(models.Model):
 
 class DatabasesForm(forms.ModelForm):
     name = forms.CharField(label='Nombre')
-    USR = forms.CharField(label='Usuario')
-    PWD = forms.CharField(label='Clave')
+    USR = forms.CharField(label='Usuario', required=False)
+    PWD = forms.CharField(label='Clave', required=False)
     class Meta:
         model = Databases
+
+class GroupsForm(forms.ModelForm):
+	group = forms.CharField(label='Nombre de Grupo', required=True)
+	class Meta:
+		model = Group
 
 class PhasForm(forms.ModelForm):
     class Meta:

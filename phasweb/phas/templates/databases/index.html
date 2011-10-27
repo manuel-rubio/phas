@@ -1,16 +1,25 @@
-{% if databases_list %}
+<a href="/database/new">Nueva</a>
+{% if databases %}
 	{% if has_prev %}
-		<a href="/database/{{ prev_page }}/">P&aacute;g. Anterior</a>
+		| <a href="/database/{{ prev_page }}/">P&aacute;g. Anterior</a>
 		{% if has_next %} | {% endif %}
 	{% endif %}
 	{% if has_next %}
 		<a href="/database/{{ next_page }}/">P&aacute;g. Siguiente</a>
 	{% endif %}
-    <ul>
-    {% for database in databases_list %}
-        <li><a href="/database/{{ database.id }}/detail/">{{ database.name }}</a></li>
+    <table>
+		<tr>
+			<th>Base de Datos</th>
+			<th>Opciones</th>
+		</tr>
+    {% for database in databases %}
+        <tr>
+			<td>{{ database.name }}</td>
+			<td><a href="/database/{{ database.id }}/edit/">Edita</a>
+			<a href="/database/{{ database.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">Elimina</a></td>
+		</tr>
     {% endfor %}
-    </ul>
+    </table>
 {% else %}
     <p>No hay bases de datos configuradas.</p>
 {% endif %}
