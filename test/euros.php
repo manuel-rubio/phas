@@ -59,7 +59,7 @@ EOF;
 
 $main->dml("INSERT INTO phas_phas( module, code, version, created_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'euros', $script, 1, date('Y-m-d H:i:s') ) ) );
 
-$main->dml("INSERT INTO phas_basesdedatos( name, DSN ) VALUES ( 'euros', 'sqlite:../euros.sqlite' )");
+$main->dml("INSERT INTO phas_databases( name, DSN ) VALUES ( 'euros', 'sqlite:../euros.sqlite' )");
 
 $phas = new PHAS();
 $phas->configureDB();

@@ -8,7 +8,7 @@ include_once(__DIR__ . "/PHAS/Session.php");
 include_once(__DIR__ . "/PHAS/Request.php");
 include_once(__DIR__ . "/PHAS/HTTP.php");
 
-define(PHAS_VERSION, "1.0");
+define("PHAS_VERSION", "1.0");
 
 function console( $data ) {
 	return print_r($data, true);
@@ -127,6 +127,7 @@ class PHAS {
 	}
 
 	private function checkModule() {
+		global $log;
 		$module = $this->request->module;
 		$res = $this->main->dql("
 			SELECT code
@@ -146,7 +147,7 @@ class PHAS {
 	public function configureDB() {
 		$databases_raw = $this->main->dql("
 			SELECT *
-			FROM phas_basesdedatos
+			FROM phas_databases
 		");
 		$databases = array();
 		if (is_array($databases_raw) and count($databases_raw)>0) {

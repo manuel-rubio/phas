@@ -1,0 +1,16 @@
+{% if databases_list %}
+	{% if has_prev %}
+		<a href="/database/{{ prev_page }}/">P&aacute;g. Anterior</a>
+		{% if has_next %} | {% endif %}
+	{% endif %}
+	{% if has_next %}
+		<a href="/database/{{ next_page }}/">P&aacute;g. Siguiente</a>
+	{% endif %}
+    <ul>
+    {% for database in databases_list %}
+        <li><a href="/database/{{ database.id }}/detail/">{{ database.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No hay bases de datos configuradas.</p>
+{% endif %}

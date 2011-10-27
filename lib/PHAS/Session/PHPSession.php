@@ -22,7 +22,7 @@ class PHPSession {
         $this->session[$key] = $val;
     }
     public function __get( $key ) {
-        return $this->session[$key];
+        return (isset($this->session[$key])) ? $this->session[$key] : null;
     }
     public function __isset( $key ) {
         return isset($this->session[$key]);

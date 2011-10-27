@@ -10,7 +10,7 @@ class Request {
         $this->request[$key] = $val;
     }
     public function __get( $key ) {
-        return $this->request[$key];
+        return isset($this->request[$key]) ? $this->request[$key] : null;
     }
     public function __isset( $key ) {
         return isset($this->request[$key]);
