@@ -32,10 +32,6 @@ pear install --alldeps phpunit/PHPUnit
 # Sistema acelerador y de caché
 pecl install APC
 
-# Conector para Memcached
-apt-get install libmemcached-dev
-pecl install memcached
-
 # HttpRequest
 pecl install pecl_http
 
@@ -47,8 +43,11 @@ pecl install spidermonkey-0.1.4
 apt-get install libyaml-dev
 pecl install yaml
 
-# Enlace con MongoDB (para usar en clusters)
+# Enlace con MongoDB (si se quiere usar Session con MongoDB)
 pecl install mongo
+
+# Enlace con Memcache (si se quiere usar Session con Memcache)
+pecl install memcache
 
 # Esto requerirá de que se agregue en el fichero php.ini
 # las siguientes líneas:
@@ -56,7 +55,7 @@ pecl install mongo
 extension=apc.so
 extension=http.so
 extension=spidermonkey.so
-extension=memcached.so
+extension=memcache.so
 extension=yaml.so
 extension=mongo.so
 

@@ -1,6 +1,7 @@
 <?php
 
 chdir(__DIR__);
+unlink(__DIR__ . "/../euros.sqlite");
 
 include_once(__DIR__ . "/../lib/PHAS.php");
 
@@ -46,7 +47,7 @@ for (var i in monedas) {
     convs[moneda]['desde_euros'] = conversion.ConversionRateResult;
 
     spider.dml('DELETE FROM valor_euro WHERE moneda = ?', [[ moneda ]] );
-    spider.dml('INSERT INTO valor_euro (moneda, a_euros, desde_euros) VALUES (?, ?, ?)', 
+    spider.dml('INSERT INTO valor_euro (moneda, a_euros, desde_euros) VALUES (?, ?, ?)',
                [[ moneda, convs[moneda]['a_euros'], convs[moneda]['desde_euros'] ]] );
 
 }
@@ -57,9 +58,14 @@ logger.log('finalizado.', PEAR_LOG_INFO);
 convs;
 EOF;
 
-$main->dml("INSERT INTO phas_phas( module, code, version, created_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'euros', $script, 1, date('Y-m-d H:i:s') ) ) );
+$data = $main->dql("SELECT * FROM phas_groups");
+if (is_array($data) and count($data) == 0) {
+    $main->dml("INSERT INTO phas_groups(\"group\") VALUES (?)", array ( array ( 'test' ) ) );
+}
 
-$main->dml("INSERT INTO phas_databases( name, DSN ) VALUES ( 'euros', 'sqlite:../euros.sqlite' )");
+$main->dml("INSERT INTO phas_phas( module, code, version, group_id, created_at ) VALUES ( ?, ?, ?, ?, ? )", array ( array ( 'euros', $script, 0, 1, date('Y-m-d H:i:s') ) ) );
+
+$main->dml("INSERT INTO phas_databases( name, DSN ) VALUES ( 'euros', 'sqlite:" . __DIR__ . "/../euros.sqlite' )");
 
 $phas = new PHAS();
 $phas->configureDB();

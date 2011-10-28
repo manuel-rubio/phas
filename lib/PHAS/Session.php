@@ -2,6 +2,7 @@
 
 include_once(__DIR__ . "/Session/PHPSession.php");
 include_once(__DIR__ . "/Session/MongoSession.php");
+include_once(__DIR__ . "/Session/MemcacheSession.php");
 
 class Session {
 
