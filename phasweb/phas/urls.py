@@ -2,6 +2,7 @@
 from django.conf.urls.defaults import *
 from django.views.generic import *
 from phas.models import *
+from phas.forms import *
 
 urlpatterns = patterns('phas.views',
 

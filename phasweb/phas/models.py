@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-from django import forms
 from django.db import models
 import datetime
 
 class Groups(models.Model):
     group = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.group
 
 class Phas(models.Model):
     module = models.CharField(max_length=50)
@@ -14,6 +16,34 @@ class Phas(models.Model):
     # FIXME: datetime.now deberia de ser usado ya que datetime.now() se cambia por la fecha
     # en el momento de la creacion.
     created_at = models.DateTimeField(default=datetime.datetime.now(), blank=True)
+    return_attr = models.ForeignKey('TAD', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.module
+
+class PhasAttrs(models.Model):
+    name = models.CharField(max_length=50)
+    tad = models.ForeignKey('TAD', blank=True, null=True)
+    code = models.ForeignKey('Phas', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.type + ("[]" * self.dim) + " " + self.name
+
+class TAD(models.Model):
+    name = models.CharField(max_length=50)
+    complex = models.BooleanField(default=False)
+    xsd_name = models.CharField(max_length=50)
+
+    def __unicode__(self):
+        return self.name
+
+class TADAttrs(models.Model):
+    name = models.CharField(max_length=50)
+    tad = models.ForeignKey('TAD', blank=True, null=True)
+    tad  = models.ForeignKey('TAD', blank=True, null=True)
+
+    def __unicode__(self):
+        return self.name
 
 class Databases(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -23,20 +53,4 @@ class Databases(models.Model):
 
     def __unicode__(self):
         return self.name
-
-class DatabasesForm(forms.ModelForm):
-    name = forms.CharField(label='Nombre')
-    USR = forms.CharField(label='Usuario', required=False)
-    PWD = forms.CharField(label='Clave', required=False)
-    class Meta:
-        model = Databases
-
-class GroupsForm(forms.ModelForm):
-	group = forms.CharField(label='Nombre de Grupo', required=True)
-	class Meta:
-		model = Group
-
-class PhasForm(forms.ModelForm):
-    class Meta:
-        model = Phas
 

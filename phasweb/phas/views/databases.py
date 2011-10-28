@@ -2,6 +2,7 @@
 from django.shortcuts import render_to_response, redirect
 from django.http import Http404
 from phas.models import *
+from phas.forms import *
 from django.template import RequestContext
 from django.core.paginator import Paginator, InvalidPage
 
