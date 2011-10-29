@@ -1,20 +1,48 @@
-<h1>Base de datos</h1>
+{% extends "forms.html" %}
 
+{% block mensajes %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% endblock %}
+
+{% block toolbar %}
+<a href="#" onclick="location.href='/database/';" class="toolbar">
+    <span class="icon-32-back hasTip" title="Volver::Ignora los cambios y vuelve al listado.">
+    </span>
+    Volver
+</a>
+<a href="#" onclick="forms[0].submit();" class="toolbar">
+    <span class="icon-32-save hasTip" title="{{ button|capfirst }}::Almacena la información.">
+    </span>
+    {{ button|capfirst }}
+</a>
+{% if database.id %}
+<a href="#" onclick="location.href='/database/{{ database.id }}/delete/';" class="toolbar">
+    <span class="icon-32-cancel hasTip" title="Elimina::Elimina el registro.">
+    </span>
+    Elimina
+</a>
+{% endif %}
+{% endblock %}
+
+{% block formulario %}
 {% if database.id == None %}
-<form action="/database/new/" method="post">
+<form name="{{ form_name|default:"myform" }}" action="/database/new/" method="post">
 {% else %}
-<form action="/database/{{ database.id }}/edit/" method="post">
+<form name="{{ form_name|default:"myform" }}" action="/database/{{ database.id }}/edit/" method="post">
 {% endif %}
     {% csrf_token %}
-    <table>
-    {{ form.as_table }}
-    <tr>
-        <td colspan="2">
-			<input type="submit" value="{{ button }}" />
-			<input type="button" value="volver" onclick="location.href='/database/';" />
-			<input type="button" value="elimina" onclick="location.href='/database/{{ database.id }}/delete/';">
-		</td>
-    </tr>
-    </table>
+    <div id="config-document">
+    <div id="page-database">
+        <table class="noshow">
+            <tr>
+                <td width="100%">
+                    <table class="admintable" cellspacing="1">
+ 						{{ form.as_table }}
+                    </table>
+				</td>
+			</tr>
+		</table>
+	</div>
+	</div>
 </form>
+{% endblock %}

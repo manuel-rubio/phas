@@ -5,20 +5,8 @@ from phas.models import *
 from phas.forms import *
 
 urlpatterns = patterns('phas.views',
-
-	# databases
-	#url(r'^database/$', list.ListView.as_view(
-	#	model = Databases,
-	#	template_name = 'databases/index.html',
-	#	context_object_name = 'databases_list'
-	#)),
-	#url(r'^database/(?P<pk>\d+)/detail/$', edit.FormView.as_view(
-	#	form_class = DatabasesForm,
-	#	template_name = 'databases/detail.html'
-	#)),
-	#url(r'^database/(?P<database_id>\d+)/save/$', 'databases.save'),
-
 	url(r'^database/$', 'databases.index'),
+	url(r'^database/(?P<page_id>\d+)/$', 'databases.index'),
 	url(r'^database/(?P<database_id>\d+)/edit/$', 'databases.edit'),
 	url(r'^database/(?P<database_id>\d+)/delete/$', 'databases.delete'),
 	url(r'^database/new/$', 'databases.new'),
