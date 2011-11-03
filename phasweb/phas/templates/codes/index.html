@@ -1,0 +1,48 @@
+{% extends "table.html" %}
+
+{% block toolbar %}
+<a href="#" onclick="location.href='{% url phas.views.codes.edit %}';" class="toolbar">
+    <span class="icon-32-new hasTip" title="Nueva::Agrega una configuración nueva.">
+    </span>
+    Nueva
+</a>
+{% endblock %}
+
+{% block tabla %}
+<thead>
+    <tr>
+		<th nowrap="true">Grupo</th>
+		<th nowrap="true">C&oacute;digo</th>
+		<th nowrap="true">Versión</th>
+		<th nowrap="true" colspan="2">Opciones</th>
+    </tr>
+</thead>
+<tfoot>
+    <tr>
+        <th colspan="5">
+			{% if codes|length > 0 %}
+        	<select name="page" onchange="location.href = '{% url phas.views.codes.index %}' + this.options[this.selectedIndex].value + '/';">
+				{% for page in pages %}
+				<option value="{{ page }}"{% if page == page_id %} selected="true"{% endif %}>{{ page }}</option><!-- {{page}} - {{page_id}} -->
+				{% endfor %}
+			</select>
+			{% else %}
+			&nbsp;
+			{% endif %}
+        </th>
+    </tr>
+</tfoot>
+<tbody>
+    {% for code in codes %}
+        <tr class="{% cycle 'row0' 'row1' %}">
+			<td><a>{{ code.group.name }}</a></td>
+			<td><span class="editlinktip hasTip" title="Código::{{ code.name }}"><a>{{ code.module }}</a></span></td>
+			<td><a>{{ code.version }}</a></td>
+			<td align="center"><a href="{% url phas.views.codes.edit code.id %}"><img src="/static/images/toolbar/icon-32-edit.png" width="16px" height="16px" alt="Editar" /></a>&nbsp;
+			<a href="{% url phas.views.codes.delete code.id %}" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');"><img src="/static/images/toolbar/icon-32-cancel.png" width="16px" height="16px" alt="Eliminar" /></a></td>
+		</tr>
+	{% empty %}
+	<tr class="row0"><td colspan="2" align="center">No hay registros.</td></tr>
+    {% endfor %}
+</tbody>	
+{% endblock %}

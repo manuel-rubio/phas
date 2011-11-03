@@ -605,3 +605,17 @@ table.admintable th {
 table.adminlist {
 	font-size: 11px;
 }
+
+ul.errorlist {
+	clear: both;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	font-size: 11px;
+	color: #cc0000;
+}
+
+textarea {
+	font-size: 11px;
+	font-family: monospace;
+}

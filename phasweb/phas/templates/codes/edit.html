@@ -1,7 +1,7 @@
 {% extends "forms.html" %}
 
 {% block toolbar %}
-<a href="#" onclick="location.href='/database/';" class="toolbar">
+<a href="#" onclick="location.href='/code/';" class="toolbar">
     <span class="icon-32-back hasTip" title="Volver::Ignora los cambios y vuelve al listado.">
     </span>
     Volver
@@ -11,8 +11,8 @@
     </span>
     {{ button|capfirst }}
 </a>
-{% if database.id %}
-<a href="#" onclick="location.href='/database/{{ database.id }}/delete/';" class="toolbar">
+{% if code.id %}
+<a href="#" onclick="location.href='/code/{{ code.id }}/delete/';" class="toolbar">
     <span class="icon-32-cancel hasTip" title="Elimina::Elimina el registro.">
     </span>
     Elimina
@@ -21,14 +21,14 @@
 {% endblock %}
 
 {% block formulario %}
-{% if database.id == None %}
-<form name="{{ form_name|default:"myform" }}" action="/database/new/" method="post">
+{% if code.id == None %}
+<form name="{{ form_name|default:"myform" }}" action="/code/new/" method="post">
 {% else %}
-<form name="{{ form_name|default:"myform" }}" action="/database/{{ database.id }}/edit/" method="post">
+<form name="{{ form_name|default:"myform" }}" action="/code/{{ code.id }}/edit/" method="post">
 {% endif %}
     {% csrf_token %}
     <div id="config-document">
-    <div id="page-database">
+    <div id="page-code">
         <table class="noshow">
             <tr>
                 <td width="100%">

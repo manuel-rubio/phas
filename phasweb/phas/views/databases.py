@@ -22,64 +22,31 @@ def index(request, page_id = 1):
 		'tipo': 'config',
 	})
 
-def new(request):
-	error_message = None
-	if request.method == 'POST':
-		database = Databases()
-		form = DatabasesForm(request.POST, instance=database, auto_id=False)
-		if form.is_valid():
-			form.save()
-			return redirect('/database/')
-		else:
-			error_message = form.errors
-
-	try:
-		database = Databases()
-		form = DatabasesForm(instance=database, auto_id=False)
-	except Databases.DoesNotExist:
-		raise Http404
-	return render_to_response('databases/edit.html', {
-		'form': form,
-		'database': database,
-		'button': 'crear',
-		'forms': [{
-			'id': 'database',
-			'name': 'Database'
-		}],
-		'titulo': 'Crea Database',
-		'tipo': 'config',
-	}, context_instance=RequestContext(request))
-
-
-def edit(request, database_id):
-	error_message = None
-	if request.method == 'POST':
-		database = Databases.objects.get(pk=database_id)
-		form = DatabasesForm(request.POST, instance=database, auto_id=False)
-		if form.is_valid():
-			form.save()
-		else:
-			error_message = form.errors
-
+def edit(request, database_id=None):
 	try:
 		if database_id:
 			database = Databases.objects.get(pk=database_id)
-			form = DatabasesForm(instance=database, auto_id=False)
 		else:
 			database = Databases()
+		if request.method == 'POST':
+			form = DatabasesForm(request.POST, instance=database, auto_id=False)
+			if form.is_valid():
+				form.save()
+				return redirect('/database/')
+		else:
 			form = DatabasesForm(instance=database, auto_id=False)
 	except Databases.DoesNotExist:
 		raise Http404
+
 	return render_to_response('databases/edit.html', {
 		'form': form,
 		'database': database,
-		'error_message': error_message,
-		'button': 'modifica',
+		'button': 'modifica' if database_id else 'crear',
 		'forms': [{
 			'id': 'database',
 			'name': 'Database'
 		}],
-		'titulo': 'Edita Database',
+		'titulo': 'Edita Database' if database_id else 'Crea Database',
 		'tipo': 'config',
 	}, context_instance=RequestContext(request))
 

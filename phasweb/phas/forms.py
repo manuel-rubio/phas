@@ -6,11 +6,14 @@ class DatabasesForm(forms.ModelForm):
     name = forms.CharField(label='Nombre')
     USR = forms.CharField(label='Usuario', required=False)
     PWD = forms.CharField(label='Clave', required=False)
+    DSN = forms.CharField(label='DSN', 
+        widget=forms.TextInput(attrs={'size':'100'})
+    )
     class Meta:
         model = Databases
 
 class GroupsForm(forms.ModelForm):
-    group = forms.CharField(label='Nombre de Grupo', required=True)
+    name = forms.CharField(label='Nombre de Grupo', required=True)
     class Meta:
         model = Groups
 
