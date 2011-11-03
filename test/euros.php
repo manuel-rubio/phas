@@ -60,7 +60,7 @@ EOF;
 
 $data = $main->dql("SELECT * FROM phas_groups");
 if (is_array($data) and count($data) == 0) {
-    $main->dml("INSERT INTO phas_groups(\"group\") VALUES (?)", array ( array ( 'test' ) ) );
+    $main->dml("INSERT INTO phas_groups(name) VALUES (?)", array ( array ( 'test' ) ) );
 }
 
 $main->dml("INSERT INTO phas_phas( module, code, version, group_id, created_at ) VALUES ( ?, ?, ?, ?, ? )", array ( array ( 'euros', $script, 0, 1, date('Y-m-d H:i:s') ) ) );

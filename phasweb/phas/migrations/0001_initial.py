@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # Adding model 'Groups'
         db.create_table('phas_groups', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('group', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50)),
         ))
         db.send_create_signal('phas', ['Groups'])
 
