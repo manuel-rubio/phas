@@ -8,41 +8,13 @@ class WSDLGenerator {
 
     public function __construct( &$main ) {
         $this->main =& $main;
-        $raw = $main->dml("SELECT name, xsd_name FROM phas_TAD WHERE complex = 0");
-        $this->types = array();
-        if (is_array($raw) and count($raw) > 0) {
-            foreach ($raw as $data) {
-                $this->types[$data['name']] = $data['xsd_name'];
-            }
-        }
-        $raw = $main->dml("
-            SELECT t.name, t.xsd_name, a.name AS attr_name, a.type, a.dim
-            FROM phas_TAD t
-            LEFT JOIN phas_Attrs a ON t.id = a.tad_id
-            WHERE complex = 1
-        ");
-        $this->mytypes = array();
-        if (is_array($raw) and count($raw) > 0) {
-            foreach ($raw as $data) {
-                $this->mytypes[$data['name']]['xsd_name'] = $data['xsd_name'];
-                if (!isset($this->types[$data['name']]['attrs'])) {
-                    $this->mytypes[$data['name']]['attrs'] = array ();
-                }
-                if (!empty($data['attr_name'])) {
-                    $this->mytypes[$data['name']]['attrs'][] = array (
-                        'name' => $data['attr_name'],
-                        'type' => $data['type'],
-                        'dim' => $data['dim']
-                    );
-                }
-            }
-        }
+        $this->types = $main->getTypes();
+        $this->mytypes = $main->getMyTypes( $this->types );
     }
 
     private function getType( $type, $min_max = false ) {
         $vector = "";
         $tipo_dato = "xsd:string";
-
         if (isset($this->types[$type])) {
             $tipo_dato = $this->types[$type];
         } elseif (isset($this->mytypes[$type])) {
@@ -109,17 +81,13 @@ class WSDLGenerator {
     }
 
     public function generate($group) {
+        global $wsdl_url;
+        $module = $group;
         $ret = "";
-        $funcs_raw = $this->main->dql("
-            SELECT p.module, a.name, a.type, a.dim
-            FROM phas_phas p LEFT JOIN phas_Attrs a ON p.id = a.code_id
-            WHERE p.version = ( SELECT MAX(version) FROM phas_phas WHERE id = p.id )
-            AND p.group_id = ( SELECT id FROM phas_groups WHERE \"group\" = ? )
-        ", array ( $group ));
-
+        $funcs = $this->main->getFuncs($group);
         if (!empty($funcs)) {
             $types = "";
-            foreach ($mytypes as $mytype => $parts) {
+            foreach ($this->mytypes as $mytype => $parts) {
                 $types .= $this->complexType($mytype, $parts);
             }
             $messages = "";
@@ -128,17 +96,22 @@ class WSDLGenerator {
             foreach ($funcs as $func => $data) {
                 $type_return = $this->getType($data["return"]);
                 $params_txt = "";
-                foreach ($data["params"] as $param) {
-                    $param["name"] = str_replace("$", "", $param["name"]);
-                    $type = $this->getType($param["type"]);
-                    $params_txt .= $this->part($param['name'], $this->getType($param['type']));
+                if (is_array($data["params"]) and count($data["params"]) > 0) {
+                    foreach ($data["params"] as $param) {
+                        $type = $this->getType($param["type"]);
+                        $params_txt .= $this->part($param['name'], $this->getType($param['type']));
+                    }
                 }
                 $messages .= $this->message($func, $params_txt, $type_return);
                 $operations_port .= $this->operations_port($func, $data['doc']);
                 $operations_bind .= $this->operations_bind($module, $func);
             }
             $module_lower = strtolower($module);
-            $WSDL_URL = WSDL_URL;
+            if (empty($wsdl_url)) {
+                $wsdl_url = "http://" . $_SERVER['SERVER_NAME'] . ":" .
+                    $_SERVER['SERVER_PORT'] . $_SERVER['PHP_SELF'] .
+                    '?group=' . $group . '&#38;soap';
+            }
             $ret = <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions name="API"
@@ -184,7 +157,7 @@ $operations_bind
     <service name="APIService">
         <port name="APIPort" binding="tns:APIBinding">
             <soap:address xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
-            location="$WSDL_URL/soap/$module_lower.php"/>
+            location="$wsdl_url"/>
         </port>
     </service>
 </definitions>

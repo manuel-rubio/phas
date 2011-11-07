@@ -13,7 +13,7 @@ DataAccess::setDB(array ( "main" => $database ));
 $main = DataAccess::singleton("main");
 
 $main->dml("DELETE FROM phas_tad");
-$main->dml("INSERT INTO phas_tad( name, complex, xsd_name ) VALUES ( ?, ?, ? )", array ( 
+$main->dml("INSERT INTO phas_tad( name, complex, xsd_name ) VALUES ( ?, ?, ? )", array (
 	array ( 'string', 0, 'xsd:string' ),
     array ( 'integer', 0, 'xsd:integer' ),
     array ( 'int', 0, 'xsd:integer' ),
@@ -23,3 +23,9 @@ $main->dml("INSERT INTO phas_tad( name, complex, xsd_name ) VALUES ( ?, ?, ? )",
     array ( 'string[][]', 0, 'tns:MatrixOfString' ),
 ));
 
+$main->dml("UPDATE phas_phas SET return_attr_id = ? WHERE id = ?", array(
+    array ( 6, 3 ),
+));
+
+$api = new SoapClient("http://localhost/phas/?group=test&wsdl");
+print_r($api->vsn());

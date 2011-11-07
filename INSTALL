@@ -43,6 +43,9 @@ pecl install spidermonkey-0.1.4
 apt-get install libyaml-dev
 pecl install yaml
 
+# Serializador XML
+pear install XML_Serializer
+
 # Enlace con MongoDB (si se quiere usar Session con MongoDB)
 pecl install mongo
 
@@ -59,7 +62,7 @@ extension=memcache.so
 extension=yaml.so
 extension=mongo.so
 
-# Para configurar con Apache:
+# Para configurar con Apache (mod_python, no aconsejado):
 
 <Location "/phasweb">
     SetHandler python-program
@@ -69,4 +72,11 @@ extension=mongo.so
     PythonDebug on
     PythonPath "['/var/www', '/var/www/phasweb'] + sys.path"
 </Location>
+
+# Para configurar con Apache (mod_wsgi, recomendado),
+# estas lineas van dentro del VirtualHost (en caso de que haya)
+# o en abierto si no hay virtualhosts:
+
+WSGIScriptAlias / /var/www/phasweb/apache/django.wsgi
+Alias /static /var/www/static
 

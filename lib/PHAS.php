@@ -8,6 +8,8 @@ include_once(__DIR__ . "/PHAS/Session.php");
 include_once(__DIR__ . "/PHAS/Request.php");
 include_once(__DIR__ . "/PHAS/HTTP.php");
 include_once(__DIR__ . "/PHAS/Backend.php");
+include_once(__DIR__ . "/PHAS/WSDLGenerator.php");
+include_once(__DIR__ . "/PHAS/SoapGenerator.php");
 
 define("PHAS_VERSION", "1.0");
 
@@ -72,14 +74,27 @@ class PHAS {
 	}
 
 	public function run() {
-	    if (!isset($this->request->module)) {
-	        print "Module not defined.";
-	        return;
-	    }
 	    if (!isset($this->request->group)) {
 	        print "Group not defined.";
 	        return;
 	    }
+	    if (isset($this->request->wsdl)) {
+            header("Content-type: text/xml; charset=utf8");
+            $wsdl = new WSDLGenerator($this->main);
+            print $wsdl->generate($this->request->group);
+            return;
+	    }
+	    if (isset($this->request->soap)) {
+            $wsdl = new WSDLGenerator($this->main);
+            $soap = new SoapGenerator($this->request->group, $wsdl, $this->main);
+            $this->configureDB();
+            $soap->handle($this->session_handler);
+            return;
+	    }
+        if (!isset($this->request->module)) {
+            print "Module not defined.";
+            return;
+        }
 	    $code = $this->checkModule();
 	    $serializer = $this->checkOutput();
 	    $this->configureDB();

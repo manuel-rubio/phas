@@ -40,7 +40,6 @@ class TAD(models.Model):
 class TADAttrs(models.Model):
     name = models.CharField(max_length=50)
     tad = models.ForeignKey('TAD', blank=True, null=True)
-    tad  = models.ForeignKey('TAD', blank=True, null=True)
 
     def __unicode__(self):
         return self.name
