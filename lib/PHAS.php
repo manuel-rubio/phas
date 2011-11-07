@@ -11,10 +11,6 @@ include_once(__DIR__ . "/PHAS/Backend.php");
 
 define("PHAS_VERSION", "1.0");
 
-function console( $data ) {
-	return print_r($data, true);
-}
-
 function exception_error_handler($errno, $errstr, $errfile, $errline ) {
 	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
@@ -55,6 +51,10 @@ class PHAS {
 	            'function' => 'serialize',
 	            'type' => 'text/plain'
 	        ),
+			'xml' => array (
+				'function' => 'xml_serialize',
+				'type' => 'text/xml; charset=utf8'
+			),
 	    );
 		if (function_exists('yaml_emit')) {
 			$this->output_handlers['yaml'] = array (
@@ -164,4 +164,24 @@ class PHAS {
 	    return $p;
 	}
 
+}
+
+function console( $data ) {
+	return print_r($data, true);
+}
+
+function xml_serialize( $data ) {
+	global $xml_options;
+	if (!$xml_options) {
+		$xml_options = array (
+			'defaultTagName' => 'data',
+			'rootName' => 'resp',
+			'encoding' => 'utf8',
+			'scalarAsAttributes' => true,
+		);
+	}
+	include("XML/Serializer.php");
+	$serializer = new XML_Serializer($xml_options);
+	$serializer->serialize($data);
+	return $serializer->getSerializedData();
 }
