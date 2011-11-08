@@ -17,7 +17,33 @@ class GroupsForm(forms.ModelForm):
     class Meta:
         model = Groups
 
+class PhasFormEdit(forms.ModelForm):
+	code = forms.CharField(label='Código', required=True,
+		widget=forms.Textarea(attrs={'rows':'20', 'cols':'80'})
+	)
+	version = forms.IntegerField(label='Versión',
+		widget=forms.TextInput(attrs={'readonly':'true'})
+	)
+	return_attr = forms.ModelChoiceField(label='Retorno (SOAP)', 
+		required=False, queryset=TAD.objects.all()
+	)
+	class Meta:
+		model = Phas
+		exclude = ( 'created_at', 'module', 'group' )
+
 class PhasForm(forms.ModelForm):
-    class Meta:
-        model = Phas
+	module = forms.CharField(label='Nombe del Módulo', required=True)
+	group = forms.ModelChoiceField(label='Grupo', required=True, queryset=Groups.objects.all())
+	code = forms.CharField(label='Código', required=True,
+		widget=forms.Textarea(attrs={'rows':'20', 'cols':'80'})
+	)
+	version = forms.IntegerField(label='Versión',
+		widget=forms.TextInput(attrs={'readonly':'true'})
+	)
+	return_attr = forms.ModelChoiceField(label='Retorno (SOAP)', 
+		required=False, queryset=TAD.objects.all()
+	)
+	class Meta:
+		model = Phas
+		exclude = ( 'created_at' )
 
