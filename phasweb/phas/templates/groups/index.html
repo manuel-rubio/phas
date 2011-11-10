@@ -34,11 +34,22 @@
     {% for group in groups %}
         <tr class="{% cycle 'row0' 'row1' %}">
 			<td><span class="editlinktip hasTip" title="Grupo::{{ group.name }}"><a>{{ group.name }}</a></span></td>
-			<td align="center"><a href="/group/{{ group.id }}/edit/"><img src="/static/images/toolbar/icon-32-edit.png" width="16px" height="16px" alt="Editar" /></a>&nbsp;
-			<a href="/group/{{ group.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');"><img src="/static/images/toolbar/icon-32-cancel.png" width="16px" height="16px" alt="Eliminar" /></a></td>
+			<td align="center">
+                <a href="/group/{{ group.id }}/edit/">
+                    <img src="/static/images/edit_f2.png" class="hasTip" width="16px" height="16px" alt="Editar" title="Editar::edita un grupo" />
+                </a>
+                &nbsp;
+                <a href="/group/{{ group.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">
+                    <img src="/static/images/cancel_f2.png" class="hasTip" width="16px" height="16px" alt="Eliminar" title="Eliminar::elimina un grupo" />
+                </a>
+                &nbsp;
+                <a href="/code/?group={{ group.id }}">
+                    <img src="/static/images/address_f2.png" class="hasTip" width="16px" height="16px" alt="Codigos" title="Ver Códigos::visualiza los códigos que pertenecen al grupo" />
+                </a>
+			</td>
 		</tr>
 	{% empty %}
 	<tr class="row0"><td colspan="2" align="center">No hay registros.</td></tr>
     {% endfor %}
-</tbody>	
+</tbody>
 {% endblock %}

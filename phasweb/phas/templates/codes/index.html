@@ -13,7 +13,7 @@
     <tr>
 		<th nowrap="true">Grupo</th>
 		<th nowrap="true">C&oacute;digo</th>
-		<th nowrap="true">Versión</th>
+		<th nowrap="true">Revisi&oacute;n</th>
 		<th nowrap="true" colspan="2">Opciones</th>
     </tr>
 </thead>
@@ -23,7 +23,7 @@
 			{% if codes|length > 0 %}
         	<select name="page" onchange="location.href = '{% url phas.views.codes.index %}' + this.options[this.selectedIndex].value + '/';">
 				{% for page in pages %}
-				<option value="{{ page }}"{% if page == page_id %} selected="true"{% endif %}>{{ page }}</option><!-- {{page}} - {{page_id}} -->
+				<option value="{{ page }}"{% if page == page_id %} selected="true"{% endif %}>{{ page }}</option>
 				{% endfor %}
 			</select>
 			{% else %}
@@ -37,12 +37,23 @@
         <tr class="{% cycle 'row0' 'row1' %}">
 			<td><a>{{ code.group.name }}</a></td>
 			<td><span class="editlinktip hasTip" title="Código::{{ code.name }}"><a>{{ code.module }}</a></span></td>
-			<td><a>{{ code.version }}</a></td>
-			<td align="center"><a href="{% url phas.views.codes.edit code.id %}"><img src="/static/images/toolbar/icon-32-edit.png" width="16px" height="16px" alt="Editar" /></a>&nbsp;
-			<a href="{% url phas.views.codes.delete code.id %}" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');"><img src="/static/images/toolbar/icon-32-cancel.png" width="16px" height="16px" alt="Eliminar" /></a></td>
+			<td align="right"><a>{{ code.version }}</a>&nbsp;</td>
+            <td align="center">
+                <a href="{% url phas.views.codes.edit code.id %}">
+                    <img src="/static/images/edit_f2.png" class="hasTip" width="16px" height="16px" alt="Editar" title="Editar::edita un código" />
+                </a>
+                &nbsp;
+                <a href="{% url phas.views.codes.delete code.id %}" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">
+                    <img src="/static/images/cancel_f2.png" class="hasTip" width="16px" height="16px" alt="Eliminar" title="Eliminar::elimina un código" />
+                </a>
+                &nbsp;
+                <a{% if code.version > 1 %} href="/code/diff/{{ code.id }}"{% endif %}>
+                    <img src="/static/images/history{% if code.version > 1 %}_f2{% endif %}.png" class="hasTip" width="16px" height="16px" alt="Codigos" title="Ver Diferencias::visualiza las diferencias que se han ido insertando en el código." />
+                </a>
+            </td>
 		</tr>
 	{% empty %}
-	<tr class="row0"><td colspan="2" align="center">No hay registros.</td></tr>
+	<tr class="row0"><td colspan="4" align="center">No hay registros.</td></tr>
     {% endfor %}
-</tbody>	
+</tbody>
 {% endblock %}

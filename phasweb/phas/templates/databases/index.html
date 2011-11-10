@@ -30,9 +30,9 @@
     {% for database in databases %}
         <tr class="{% cycle 'row0' 'row1' %}">
 			<td><span class="editlinktip hasTip" title="Database::{{ database.name }}"><a>{{ database.name }}</a></span></td>
-			<td align="center"><a href="/database/{{ database.id }}/edit/"><img src="/static/images/toolbar/icon-32-edit.png" width="16px" height="16px" alt="Editar" /></a>&nbsp;
-			<a href="/database/{{ database.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');"><img src="/static/images/toolbar/icon-32-cancel.png" width="16px" height="16px" alt="Eliminar" /></a></td>
+			<td align="center"><a href="/database/{{ database.id }}/edit/"><img src="/static/images/edit_f2.png" width="16px" height="16px" alt="Editar" /></a>&nbsp;
+			<a href="/database/{{ database.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');"><img src="/static/images/cancel_f2.png" width="16px" height="16px" alt="Eliminar" /></a></td>
 		</tr>
     {% endfor %}
-</tbody>	
+</tbody>
 {% endblock %}
