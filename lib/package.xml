@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.8.0" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+    http://pear.php.net/dtd/tasks-1.0.xsd
+    http://pear.php.net/dtd/package-2.0
+    http://pear.php.net/dtd/package-2.0.xsd">
+ <name>PHAS</name>
+ <channel>pear.bosqueviejo.net</channel>
+ <summary>PHP Application Server for JavaScript code.</summary>
+ <description>
+   PHAS-JS is a Application Server for JavaScript written in PHP.
+ </description>
+ <lead>
+  <name>Manuel Rubio</name>
+  <user>bombadil</user>
+  <email>bombadil@bosqueviejo.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2011-11-10</date>
+ <time>15:30:00</time>
+ <version>
+  <release>1.0</release>
+  <api>1.0</api>
+ </version>
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+ <license uri="http://www.gnu.org/licenses/gpl.html">GPL</license>
+ <notes>-</notes>
+ <contents>
+	<dir name="/">
+		<dir name="PHAS">
+			<dir name="Backend">
+				<file name="BackendMongo.php" role="php" />
+				<file name="BackendSQL.php" role="php" />
+                <file name="IBackend.php" role="php" />
+			</dir>
+            <file name="Backend.php" role="php" />
+			<dir name="Cache">
+                <file name="CacheAPC.php" role="php" />
+                <file name="CacheMemcache.php" role="php" />
+                <file name="ICache.php" role="php" />
+			</dir>
+            <file name="Cache.php" role="php" />
+			<file name="DataAccess.php" role="php" />
+			<file name="HTTP.php" role="php" />
+            <file name="JS.php" role="php" />
+            <file name="Request.php" role="php" />
+			<dir name="Session">
+				<file name="MemcacheSession.php" role="php" />
+				<file name="MongoSession.php" role="php" />
+				<file name="PHPSession.php" role="php" />
+			</dir>
+            <file name="Session.php" role="php" />
+			<file name="SoapCli.php" role="php" />
+            <file name="SoapGenerator.php" role="php" />
+            <file name="WSDLGenerator.php" role="php" />
+		</dir>
+        <file name="PHAS.php" role="php" />
+	</dir>
+ </contents>
+    <dependencies>
+        <required>
+            <php>
+                <min>5.3.1</min>
+            </php>
+            <pearinstaller>
+                <min>1.9.0</min>
+            </pearinstaller>
+            <package>
+                <name>Log</name>
+                <channel>pear.php.net</channel>
+            </package>
+            <package>
+                <name>spidermonkey</name>
+                <channel>pecl.php.net</channel>
+                <providesextension>spidermonkey</providesextension>
+            </package>
+            <package>
+                <name>pecl_http</name>
+                <channel>pecl.php.net</channel>
+                <providesextension>pecl_http</providesextension>
+            </package>
+        </required>
+        <optional>
+            <group name="xml_output" hint="Install for XML output handler">
+                <package>
+                    <name>XML_Serializer</name>
+                    <channel>pear.php.net</channel>
+                </package>
+            </group>
+            <group name="memcache_cache_session" hint="Install to use Memcache in Session or Cache systems">
+                <package>
+                    <name>memcache</name>
+                    <channel>pecl.php.net</channel>
+                    <providesextension>memcache</providesextension>
+                </package>
+            </group>
+            <group name="mongo_backend" hint="Install to use MongoDB in Session or Backend">
+                <package>
+                    <name>mongo</name>
+                    <channel>pecl.php.net</channel>
+                    <providesextension>mongo</providesextension>
+                </package>
+            </group>
+            <group name="yaml_output" hint="Install for YAML output handler">
+                <package>
+                    <name>yaml</name>
+                    <channel>pecl.php.net</channel>
+                    <providesextension>yaml</providesextension>
+                </package>
+            </group>
+            <group name="apc_cache" hint="Install for APC cache use in DataAccess and calls with cache option">
+                <package>
+                    <name>APC</name>
+                    <channel>pecl.php.net</channel>
+                    <providesextension>APC</providesextension>
+                </package>
+            </group>
+        </optional>
+    </dependencies>
+    <phprelease />
+</package>
