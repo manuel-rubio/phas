@@ -1,6 +1,6 @@
 <?php
 
-class BackendSQL {
+class BackendSQL implements IBackend {
 
 	private $conn;
 

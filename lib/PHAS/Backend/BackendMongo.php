@@ -1,6 +1,6 @@
 <?php
 
-class BackendMongo {
+class BackendMongo implements IBackend {
 
 	public function __construct() {
 	}

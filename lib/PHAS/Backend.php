@@ -1,12 +1,14 @@
 <?php
 
+include_once(__DIR__ . '/Backend/IBackend.php');
 include_once(__DIR__ . '/Backend/BackendSQL.php');
+include_once(__DIR__ . '/Backend/BackendMongo.php');
 
 class Backend {
 	
 	private static $conn = array();
 	
-	public static function factory() {
+	public static function &factory() {
 		global $database;
 		$conn = $database['DSN'];
 		if (!isset(self::$conn[$conn])) {
