@@ -2,13 +2,14 @@
 
 class DataAccess {
     private $pdo;
+	private $cache;
     private static $databases;
 	private static $conn;
 
-	public static function singleton( $name ) {
+	public static function singleton( $name, $cache=false ) {
 		if (isset(self::$databases[$name])) {
 		 	if (!isset(self::$conn[$name])) {
-				self::$conn[$name] = new DataAccess($name);
+				self::$conn[$name] = new DataAccess($name, $cache);
 			}
 			return self::$conn[$name];
 		}
@@ -17,7 +18,7 @@ class DataAccess {
     public static function setDB( $databases ) {
         self::$databases = $databases;
     }
-    public function __construct( $name ) {
+    public function __construct( $name, $cache=false ) {
         if (!isset(self::$databases[$name])) {
             throw new Exception("database [$name] not found, only: " . serialize(self::$databases));
         }
@@ -27,6 +28,9 @@ class DataAccess {
         } else {
             $this->pdo = new PDO($db["DSN"], $db["USR"], $db["PWD"]);
         }
+		if ($cache) {
+			$this->cache = Cache::factory($cache);
+		}
     }
     public function dql( $sql, $params = array() ) {
         $p = array();
@@ -37,10 +41,21 @@ class DataAccess {
         } else {
             $p = $params;
         }
+		$key = 'sql/' . md5($sql . serialize($p));
+		if ($this->cache) {
+			$data = $this->cache->get($key, $succ);
+			if ($succ) {
+				return $data;
+			}
+		}
         $sth = $this->pdo->prepare($sql);
         if ($sth instanceof PDOStatement) {
             $sth->execute($p);
-            return $sth->fetchAll(PDO::FETCH_ASSOC);
+            $response = $sth->fetchAll(PDO::FETCH_ASSOC);
+			if ($this->cache) {
+				$this->cache->set($key, $response);
+			}
+			return $response;
         }
         $errno = $this->pdo->errorCode();
         $errtxt = $this->pdo->errorInfo();
@@ -80,4 +95,3 @@ class DataAccess {
         }
     }
 }
-

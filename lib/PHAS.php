@@ -3,6 +3,7 @@
 include_once("Log.php");
 include_once(__DIR__ . "/PHAS/JS.php");
 include_once(__DIR__ . "/PHAS/SoapCli.php");
+include_once(__DIR__ . "/PHAS/Cache.php");
 include_once(__DIR__ . "/PHAS/DataAccess.php");
 include_once(__DIR__ . "/PHAS/Session.php");
 include_once(__DIR__ . "/PHAS/Request.php");
@@ -27,10 +28,12 @@ class PHAS {
 	private $request;
 	private $main;
 	private $output_handlers;
+	private $cache;
 
 	public function __construct() {
-	    global $log, $logfile, $database;
+	    global $log, $logfile, $database, $cache;
 	    $this->request = new Request();
+		$this->cache = Cache::factory($cache);
 
 	    if (isset($logfile)) {
 	        $log = Log::factory('file', $logfile, 'PHAS');
@@ -75,30 +78,66 @@ class PHAS {
 
 	public function run() {
 	    if (!isset($this->request->group)) {
-	        print "Group not defined.";
-	        return;
+	        return "Group not defined.";
 	    }
 	    if (isset($this->request->wsdl)) {
             header("Content-type: text/xml; charset=utf8");
+			$key = 'wsdl/' . $this->request->group;
+			if ($this->cache and isset($this->request->cache)) {
+				$data = $this->cache->get($key, $succ);
+				if ($succ) {
+					return $data;
+				}
+			}
             $wsdl = new WSDLGenerator($this->main);
-            print $wsdl->generate($this->request->group);
-            return;
+            $data = $wsdl->generate($this->request->group);
+			if ($this->cache and isset($this->request->cache)) {
+				$this->cache->set($key, $data);
+			}
+            return $data;
 	    }
 	    if (isset($this->request->soap)) {
+			$key = 'soap/' . $this->request->group . '/' . md5(http_get_request_body());
+			if ($this->cache and isset($this->request->cache)) {
+				$data = $this->cache->get($key, $succ);
+				if ($succ) {
+					return $data;
+				}
+			}
             $wsdl = new WSDLGenerator($this->main);
             $soap = new SoapGenerator($this->request->group, $wsdl, $this->main);
             $this->configureDB();
+			ob_start();
             $soap->handle($this->session_handler);
-            return;
+			$response = ob_get_contents();
+			ob_end_clean();
+			if ($this->cache and isset($this->request->cache)) {
+				$this->cache->set($key, $response);
+			}
+            return $response;
 	    }
         if (!isset($this->request->module)) {
-            print "Module not defined.";
-            return;
+            return "Module not defined.";
         }
+		$key = 'call/' . $this->request->group . '/' . $this->request->module;
+		if ($this->cache and isset($this->request->cache)) {
+			$data = $this->cache->get($key, $succ);
+			if ($succ) {
+				header("Content-type: {$data['content-type']}");
+				return $data['resp'];
+			}
+		}
 	    $code = $this->checkModule();
 	    $serializer = $this->checkOutput();
 	    $this->configureDB();
-	    return $this->evaluate($code, $serializer);
+	    $response = $this->evaluate($code, $serializer);
+		if ($this->cache and isset($this->request->cache)) {
+			$this->cache->set($key, array (
+				'resp' => $response,
+				'content-type' => $this->getOutputType()
+			));
+		}
+		return $response;
 	}
 
 	public function setOutputHandler( $name, $function, $type = 'text/plain' ) {
@@ -125,6 +164,20 @@ class PHAS {
 	    }
 	    header("Content-type: {$output['type']}");
 	    return $output['function'];
+	}
+	
+	private function getOutputType() {
+	    if (isset($this->request->output)) {
+	        $output = $this->request->output;
+	    } else {
+	        $output = 'php';
+	    }
+	    if (isset($this->output_handlers[$output])) {
+	        $output = $this->output_handlers[$output];
+	    } else {
+	        $output = $this->output_handlers['php'];
+	    }
+	    return $output['type'];
 	}
 
 	private function evaluate( $code, $serializer ) {

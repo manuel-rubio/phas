@@ -6,6 +6,7 @@ $logfile = __DIR__ . "/../phas.log";
 $database = array (
 	"DSN" => "sqlite:/tmp/main.sqlite"
 );
+$cache = 'APC';
 
 $phas = new PHAS();
 $phas->setOutputHandler('cv', 'cv_output');
