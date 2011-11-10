@@ -119,7 +119,7 @@ class PHAS {
         if (!isset($this->request->module)) {
             return "Module not defined.";
         }
-		$key = 'call/' . $this->request->group . '/' . $this->request->module;
+		$key = 'call/' . $this->request->group . '/' . $this->request->module . '/' . $this->request->output;
 		if ($this->cache and isset($this->request->cache)) {
 			$data = $this->cache->get($key, $succ);
 			if ($succ) {
