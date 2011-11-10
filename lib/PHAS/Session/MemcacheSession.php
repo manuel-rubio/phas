@@ -1,25 +1,18 @@
 <?php # -*- coding: utf-8 -*-
 
-class MemcacheSession {
+class MemcacheSession extends Session {
     private $memcache;
-    private $session_id;
     private $expires;
     public function __construct( $session_id=null ) {
-        global $memcache_host, $memcache_port, $session_expires;
+        global $session_memcache_host, $session_memcache_port, $session_expires;
         if (!isset($session_expires)) {
             $this->expires = 24 * 3600; // a day
         } else {
             $this->expires = $session_expires;
         }
         $this->memcache = new Memcache();
-        $this->memcache->connect($memcache_host, $memcache_port);
+        $this->memcache->connect($session_memcache_host, $session_memcache_port);
         $this->session_id = (!$session_id) ? sha1(mt_rand()) : $session_id;
-    }
-    public function session_id() {
-        return $this->session_id;
-    }
-    public function gc() {
-        // nothing
     }
     public function __set( $key, $val ) {
         $data = unserialize($this->memcache->get($this->session_id));

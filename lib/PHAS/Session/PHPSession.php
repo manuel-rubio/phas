@@ -1,6 +1,6 @@
 <?php
 
-class PHPSession {
+class PHPSession extends Session {
     private $session;
     public function __construct($session_id=null) {
         global $session_expires;
@@ -11,12 +11,8 @@ class PHPSession {
             session_cache_expire(round($session_expires/60));
         }
         session_start();
+		$this->session_id = session_id();
         $this->session =& $_SESSION;
-    }
-    public function gc() {
-    }
-    public function session_id() {
-        return session_id();
     }
     public function __set( $key, $val ) {
         $this->session[$key] = $val;
@@ -34,4 +30,3 @@ class PHPSession {
         session_destroy();
     }
 }
-

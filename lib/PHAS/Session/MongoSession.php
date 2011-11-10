@@ -1,7 +1,6 @@
 <?php
 
-class MongoSession {
-    private $sid;
+class MongoSession extends Session {
     private $collect;
     private $expires;
     private static $conn;
@@ -19,14 +18,11 @@ class MongoSession {
             self::$conn = new Mongo($mongo_server);
         }
         $sid = (!$session_id) ? sha1(mt_rand()) : $session_id;
-        $this->sid = $sid;
+        $this->session_id = $sid;
         $this->collect = self::$conn->session->$sid;
         $this->collect->ensureIndex( array ( "key" => 1 ) );
         $this->collect->ensureIndex( array ( "ts" => 1 ) );
         $this->gc();
-    }
-    public function session_id() {
-        return $this->sid;
     }
     public function gc() {
         $this->collect->remove(array ( "ts" => array ( '$lte' => time() )));
@@ -58,4 +54,3 @@ class MongoSession {
         $this->collect->drop();
     }
 }
-
