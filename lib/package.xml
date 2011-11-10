@@ -83,40 +83,30 @@
             </package>
         </required>
         <optional>
-            <group name="xml_output" hint="Install for XML output handler">
-                <package>
-                    <name>XML_Serializer</name>
-                    <channel>pear.php.net</channel>
-                </package>
-            </group>
-            <group name="memcache_cache_session" hint="Install to use Memcache in Session or Cache systems">
-                <package>
-                    <name>memcache</name>
-                    <channel>pecl.php.net</channel>
-                    <providesextension>memcache</providesextension>
-                </package>
-            </group>
-            <group name="mongo_backend" hint="Install to use MongoDB in Session or Backend">
-                <package>
-                    <name>mongo</name>
-                    <channel>pecl.php.net</channel>
-                    <providesextension>mongo</providesextension>
-                </package>
-            </group>
-            <group name="yaml_output" hint="Install for YAML output handler">
-                <package>
-                    <name>yaml</name>
-                    <channel>pecl.php.net</channel>
-                    <providesextension>yaml</providesextension>
-                </package>
-            </group>
-            <group name="apc_cache" hint="Install for APC cache use in DataAccess and calls with cache option">
-                <package>
-                    <name>APC</name>
-                    <channel>pecl.php.net</channel>
-                    <providesextension>APC</providesextension>
-                </package>
-            </group>
+            <package>
+                <name>XML_Serializer</name>
+                <channel>pear.php.net</channel>
+            </package>
+            <package>
+                <name>memcache</name>
+                <channel>pecl.php.net</channel>
+                <providesextension>memcache</providesextension>
+            </package>
+            <package>
+                <name>mongo</name>
+                <channel>pecl.php.net</channel>
+                <providesextension>mongo</providesextension>
+            </package>
+            <package>
+                <name>yaml</name>
+                <channel>pecl.php.net</channel>
+                <providesextension>yaml</providesextension>
+            </package>
+            <package>
+                <name>APC</name>
+                <channel>pecl.php.net</channel>
+                <providesextension>APC</providesextension>
+            </package>
         </optional>
     </dependencies>
     <phprelease />
