@@ -46,7 +46,7 @@ def index(request, page_id = 1):
         'pages': codes.page_range,
         'page_id': int(page_id),
         'titulo': 'Listado de Códigos',
-        'tipo': 'config',
+        'tipo': 'javascript',
     })
 
 def edit(request, code_id=None):
@@ -85,7 +85,7 @@ def edit(request, code_id=None):
             'name': 'Código'
         }],
         'titulo': 'Edita Código' if code_id else 'Crea Código',
-        'tipo': 'config',
+        'tipo': 'javascript',
     }, context_instance=RequestContext(request))
 
 def delete(request, code_id):

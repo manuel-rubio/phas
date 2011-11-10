@@ -19,7 +19,7 @@ class GroupsForm(forms.ModelForm):
 
 class PhasFormEdit(forms.ModelForm):
 	code = forms.CharField(label='Código', required=True,
-		widget=forms.Textarea(attrs={'rows':'20', 'cols':'80'})
+		widget=forms.Textarea(attrs={'rows':'20', 'cols':'80', 'id':'mycode_textarea'})
 	)
 	version = forms.IntegerField(label='Versión',
 		widget=forms.TextInput(attrs={'readonly':'true'})

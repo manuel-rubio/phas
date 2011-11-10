@@ -315,7 +315,7 @@ div.current dd {
 }
 
 #cpanel img  { padding: 10px 0; margin: 0 auto; }
-#cpanel span { display: block; text-align: center; }
+#cpanel span { display: block; text-align: center; font-size: 12px; }
 
 /* standard form style table */
 div.col50 { float: left; width: 50%; }
@@ -618,4 +618,13 @@ ul.errorlist {
 textarea {
 	font-size: 11px;
 	font-family: monospace;
+}
+
+a#title {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.jpane-slider div p {
+	font-size: 11px;
 }

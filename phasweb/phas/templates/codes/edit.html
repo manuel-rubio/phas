@@ -1,5 +1,16 @@
 {% extends "forms.html" %}
 
+{% block switcher %}
+{% endblock %}
+
+{% block mylibs %}
+<script type="text/javascript" src="/static/js/codemirror.js"></script>
+<script type="text/javascript" src="/static/js/javascript.js"></script>
+<link rel="stylesheet" href="/static/css/codemirror.css" type="text/css" />
+<link rel="stylesheet" href="/static/css/default.css" type="text/css" />
+<style type="text/css">.CodeMirror {border: 1px solid black;}</style>
+{% endblock %}
+
 {% block toolbar %}
 <a href="#" onclick="location.href='/code/';" class="toolbar">
     <span class="icon-32-back hasTip" title="Volver::Ignora los cambios y vuelve al listado.">
@@ -48,6 +59,12 @@
 				</td>
 			</tr>
 		</table>
+		<script type="text/javascript"><!--
+		var editor = CodeMirror.fromTextArea(document.getElementById("mycode_textarea"), {
+		        lineNumbers: true,
+		        matchBrackets: true
+		      });
+		//--></script>
 	</div>
 	</div>
 </form>

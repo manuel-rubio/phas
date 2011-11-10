@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block base %}
+	<div class="border">
+		<div class="padding">
+			<div id="element-box">
+				<div class="t">
+					<div class="t">
+						<div class="t"></div>
+					</div>
+				</div>
+				<div class="m" >
+					<table class="adminform">
+					<tr>
+						<td width="55%" valign="top">
+							<div id="cpanel">
+								<div style="float:left;">
+									<div class="icon">
+										<a href="/database">
+											<img src="/static/images/header/icon-48-database.gif" alt="Bases de Datos" /><span>Bases de Datos</span>
+										</a>
+									</div>
+								</div>
+								<div style="float:left;">
+									<div class="icon">
+										<a href="/group">
+											<img src="/static/images/header/icon-48-folder.png" alt="Bases de Datos" /><span>Grupos</span>
+										</a>
+									</div>
+								</div>
+								<div style="float:left;">
+									<div class="icon">
+										<a href="/code">
+											<img src="/static/images/header/icon-48-javascript.png" alt="Bases de Datos" /><span>C&oacute;digos</span>
+										</a>
+									</div>
+								</div>
+							</div>
+						</td>
+							<td width="45%" valign="top">
+								<div id="content-pane" class="pane-sliders">
+									<div class="panel">
+										<h3 class="jpane-toggler title" id="cpanel-panel-custom">
+											<span>Bienvenido a PHAS-JS {{ version|default:"1.0" }}</span>
+										</h3>
+										<div class="jpane-slider content">
+											<div style="padding: 5px">
+												<p>PHAS-JS es un servidor de aplicaciones hecho en PHP, pero para aplicaciones escritas en JavaScript. Esta es la versión {{ version|default:"1.0" }}, puede ver sus características en la web oficial:</p>
+												<p><a href="http://phas-js.org">http://phas-js.org</a></p>
+												<p>No olvide que PHAS-JS es software libre y se distribuye bajo licencia <a href="http://www.gnu.org/licenses/gpl.html">GPL</a>, puede revisar el enlace para más información sobre dicha licencia.</p>
+											</div>
+										</div>
+									</div>
+									<div class="panel">
+										<h3 class="jpane-toggler title" id="cpanel-panel-stats">
+											<span>Elementos Creados</span>
+										</h3>
+										<div class="jpane-slider content">
+											<table class="adminlist">
+											<tr>
+												<td class="title" width="80%">
+													<strong>Elemento</strong>
+												</td>
+												<td class="title">
+													<strong>&Iacute;tems</strong>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<a href="/database">Databases</a>
+												</td>
+												<td>{{ databases|default:0 }}</td>
+											</tr>
+											<tr>
+												<td>
+													<a href="/group">Groups</a>
+												</td>
+												<td>{{ groups|default:0 }}</td>
+											</tr>
+											<tr>
+												<td>
+													<a href="/code">Codes</a>
+												</td>
+												<td>{{ codes|default:0 }}</td>
+											</tr>
+											</table>
+										</div>
+									</div>
+								</div>
+							</td>
+						</tr>
+						</table>
+						<div class="clr"></div>
+					</div>
+					<div class="b">
+						<div class="b">
+							<div class="b"></div>
+						</div>
+					</div>
+				</div>
+				<div class="clr"></div>
+			</div>
+		</div>
+{% endblock %}

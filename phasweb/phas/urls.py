@@ -5,6 +5,8 @@ from phas.models import *
 from phas.forms import *
 
 urlpatterns = patterns('phas.views',
+	url(r'^$', 'base.index'),
+
 	url(r'^database/$', 'databases.index'),
 	url(r'^database/(?P<page_id>\d+)/$', 'databases.index'),
 	url(r'^database/(?P<database_id>\d+)/edit/$', 'databases.edit'),

@@ -19,7 +19,7 @@ def index(request, page_id = 1):
 		'pages': databases.page_range,
 		'page_id': int(page_id),
 		'titulo': 'Listado de Databases',
-		'tipo': 'config',
+		'tipo': 'database',
 	})
 
 def edit(request, database_id=None):
@@ -47,7 +47,7 @@ def edit(request, database_id=None):
 			'name': 'Database'
 		}],
 		'titulo': 'Edita Database' if database_id else 'Crea Database',
-		'tipo': 'config',
+		'tipo': 'database',
 	}, context_instance=RequestContext(request))
 
 def delete(request, database_id):

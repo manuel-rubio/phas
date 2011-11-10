@@ -19,7 +19,7 @@ def index(request, page_id = 1):
 		'pages': groups.page_range,
 		'page_id': int(page_id),
 		'titulo': 'Listado de Grupos',
-		'tipo': 'config',
+		'tipo': 'folder',
 	})
 
 def edit(request, group_id=None):
@@ -47,7 +47,7 @@ def edit(request, group_id=None):
 			'name': 'Grupo'
 		}],
 		'titulo': 'Edita Grupo' if group_id else 'Crea Grupo',
-		'tipo': 'config',
+		'tipo': 'folder',
 	}, context_instance=RequestContext(request))
 
 def delete(request, group_id):
