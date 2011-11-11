@@ -29,7 +29,7 @@ def index(request, page_id = 1):
     data = {}
     raw = []
     group_id = 0
-    if 'group' in request.REQUEST:
+    if 'group' in request.REQUEST and request.REQUEST['group'] != '':
         raw = Phas.objects.filter(group__id=request.REQUEST['group'])
         group_id = request.REQUEST['group']
     else:

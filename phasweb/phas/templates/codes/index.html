@@ -1,7 +1,7 @@
 {% extends "table.html" %}
 
 {% block filtro %}
-	<li><a>Grupos: <select onchange="location.href='{% url phas.views.codes.index %}?group=' + this.value;">
+	<li><a>Grupos: <select onchange="location.href='{% url phas.views.codes.index %}' + (this.value!='' ? '?group=' + this.value : '');">
 		<option value=""></value>
 		{% for g in grupos %}
 		<option value="{{ g.id }}"{% if group_id == g.id %} selected="true"{% endif %}>{{ g.name }}</option>
