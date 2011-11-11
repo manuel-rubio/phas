@@ -6,13 +6,32 @@ from phas.forms import *
 from django.template import RequestContext
 from django.core.paginator import Paginator, InvalidPage
 from datetime import *
+from difflib import *
+
+def diff(request, code_id):
+	code = Phas.objects.get(pk=code_id)
+	codes = Phas.objects.filter(module=code.module, group__id=code.group_id)
+	# TODO: cambiar esto por versiones a elegir
+	code1 = codes[0].code.splitlines(1)
+	code2 = codes[1].code.splitlines(1)
+	diffs = unified_diff(
+		code1, code2, 
+		codes[0].module + "@" + str(codes[0].version),
+		codes[1].module + "@" + str(codes[1].version))
+	return render_to_response('codes/diff.html',{
+	    'titulo': 'Diferencias',
+	    'tipo': 'javascript',
+		'text_diff': "".join(diffs)
+	})
 
 def index(request, page_id = 1):
     page = int(page_id)
     data = {}
     raw = []
+    group_id = 0
     if 'group' in request.REQUEST:
         raw = Phas.objects.filter(group__id=request.REQUEST['group'])
+        group_id = request.REQUEST['group']
     else:
         raw = Phas.objects.all()
     for p in raw:
@@ -47,6 +66,9 @@ def index(request, page_id = 1):
         'page_id': int(page_id),
         'titulo': 'Listado de Códigos',
         'tipo': 'javascript',
+		'group_id': int(group_id),
+		'grupos': Groups.objects.all(),
+		'filtro': True,
     })
 
 def edit(request, code_id=None):

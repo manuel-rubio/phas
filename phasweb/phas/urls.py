@@ -24,4 +24,5 @@ urlpatterns = patterns('phas.views',
 	url(r'^code/(?P<code_id>\d+)/edit/$', 'codes.edit'),
 	url(r'^code/(?P<code_id>\d+)/delete/$', 'codes.delete'),
 	url(r'^code/new/$', 'codes.edit'),
+	url(r'^code/diff/(?P<code_id>\d+)/$', 'codes.diff')
 )

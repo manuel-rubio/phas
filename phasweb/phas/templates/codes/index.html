@@ -1,10 +1,19 @@
 {% extends "table.html" %}
 
+{% block filtro %}
+	<li><a>Grupos: <select onchange="location.href='{% url phas.views.codes.index %}?group=' + this.value;">
+		<option value=""></value>
+		{% for g in grupos %}
+		<option value="{{ g.id }}"{% if group_id == g.id %} selected="true"{% endif %}>{{ g.name }}</option>
+		{% endfor %}
+	</select></a></li>
+{% endblock %}
+
 {% block toolbar %}
 <a href="#" onclick="location.href='{% url phas.views.codes.edit %}';" class="toolbar">
-    <span class="icon-32-new hasTip" title="Nueva::Agrega una configuración nueva.">
+    <span class="icon-32-new hasTip" title="Nuevo::Agrega un código nuevo.">
     </span>
-    Nueva
+    Nuevo
 </a>
 {% endblock %}
 
