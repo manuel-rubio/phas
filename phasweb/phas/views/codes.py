@@ -8,20 +8,26 @@ from django.core.paginator import Paginator, InvalidPage
 from datetime import *
 from difflib import *
 
-def diff(request, code_id):
+def diff(request, code_id, src="0", dst="1"):
 	code = Phas.objects.get(pk=code_id)
 	codes = Phas.objects.filter(module=code.module, group__id=code.group_id)
 	# TODO: cambiar esto por versiones a elegir
-	code1 = codes[0].code.splitlines(1)
-	code2 = codes[1].code.splitlines(1)
-	diffs = unified_diff(
+	code1 = codes[int(src)].code.splitlines(1)
+	code2 = codes[int(dst)].code.splitlines(1)
+	diff = HtmlDiff()
+	diffs = diff.make_table(
 		code1, code2, 
-		codes[0].module + "@" + str(codes[0].version),
-		codes[1].module + "@" + str(codes[1].version))
+		codes[int(src)].module + "@" + str(codes[int(src)].version),
+		codes[int(dst)].module + "@" + str(codes[int(dst)].version))
 	return render_to_response('codes/diff.html',{
 	    'titulo': 'Diferencias',
 	    'tipo': 'javascript',
-		'text_diff': "".join(diffs)
+		'table_diff': diffs,
+		'total_diff': len(codes)-1,
+		'total_diff_list': range(0, len(codes)),
+		'src': int(src),
+		'dst': int(dst),
+		'code_id': int(code_id),
 	})
 
 def index(request, page_id = 1):

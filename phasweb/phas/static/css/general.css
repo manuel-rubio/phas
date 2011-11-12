@@ -628,3 +628,34 @@ a#title {
 .jpane-slider div p {
 	font-size: 11px;
 }
+
+table.diff td {
+	font-size: 11px;
+	padding: 2px;
+}
+table.diff tr th.diff_header {
+	font-size: 12px;
+	color: #ffffff;
+	background-color: #9c3;
+}
+table.diff tr td.diff_header {
+	font-size: 10px;
+	color: #ffffff;
+	background-color: #9c3;
+}
+table.diff tr .diff_next {
+	visibility: hidden;
+}
+.diff_add {
+	background-color: #88ff88;
+}
+.diff_sub {
+	background-color: #ff8888;
+}
+th.diff_header {
+	border: 0px;
+}
+td.diff_header {
+}
+.diff_next {
+}
