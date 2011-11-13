@@ -23,9 +23,9 @@ $main->dml("INSERT INTO phas_tad( name, complex, xsd_name ) VALUES ( ?, ?, ? )",
     array ( 'string[][]', 0, 'tns:MatrixOfString' ),
 ));
 
-$main->dml("UPDATE phas_phas SET return_attr_id = ? WHERE id = ?", array(
-    array ( 6, 3 ),
+$main->dml("UPDATE phas_codeversions SET return_attr_id = ? WHERE code_id = (SELECT id FROM phas_codes WHERE name = ? )", array(
+    array ( 6, 'vsn' ),
 ));
 
-$api = new SoapClient("http://localhost/phas/?group=test&wsdl");
+$api = new SoapClient("http://localhost/~bombadil/phas/?module=test&wsdl");
 print_r($api->vsn());

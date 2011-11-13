@@ -1,10 +1,10 @@
 {% extends "table.html" %}
 
 {% block filtro %}
-	<li><a>Grupos: <select onchange="location.href='{% url phas.views.codes.index %}' + (this.value!='' ? '?group=' + this.value : '');">
+	<li><a>M&oacute;dulos: <select onchange="location.href='{% url phas.views.codes.index %}' + (this.value!='' ? '?module=' + this.value : '');">
 		<option value=""></value>
-		{% for g in grupos %}
-		<option value="{{ g.id }}"{% if group_id == g.id %} selected="true"{% endif %}>{{ g.name }}</option>
+		{% for m in modulos %}
+		<option value="{{ m.id }}"{% if module_id == m.id %} selected="true"{% endif %}>{{ m.name }}</option>
 		{% endfor %}
 	</select></a></li>
 {% endblock %}
@@ -20,7 +20,7 @@
 {% block tabla %}
 <thead>
     <tr>
-		<th nowrap="true">Grupo</th>
+		<th nowrap="true">M&oacute;dulo</th>
 		<th nowrap="true">C&oacute;digo</th>
 		<th nowrap="true">Revisi&oacute;n</th>
 		<th nowrap="true" colspan="2">Opciones</th>
@@ -44,8 +44,8 @@
 <tbody>
     {% for code in codes %}
         <tr class="{% cycle 'row0' 'row1' %}">
-			<td><a>{{ code.group.name }}</a></td>
-			<td><span class="editlinktip hasTip" title="Código::{{ code.name }}"><a>{{ code.module }}</a></span></td>
+			<td><a>{{ code.module.name }}</a></td>
+			<td><span class="editlinktip hasTip" title="Código::{{ code.name }}"><a>{{ code.name }}</a></span></td>
 			<td align="right"><a>{{ code.version }}</a>&nbsp;</td>
             <td align="center">
                 <a href="{% url phas.views.codes.edit code.id %}">

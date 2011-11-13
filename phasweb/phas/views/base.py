@@ -6,7 +6,7 @@ from django.template import RequestContext
 
 def index(request):
 	return render_to_response('index.html', {
-		'groups': Groups.objects.count(),
-		'codes': len(Phas.objects.values_list('group_id', 'module').distinct()),
+		'modules': Modules.objects.count(),
+		'codes': len(Codes.objects.values_list('module_id', 'name').distinct()),
 		'databases': Databases.objects.count(),
 	})

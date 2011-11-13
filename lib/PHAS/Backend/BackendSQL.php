@@ -10,13 +10,15 @@ class BackendSQL implements IBackend {
 	    $this->conn = DataAccess::singleton('main');
 	}
 
-	public function getCode( $module, $group ) {
+	public function getCode( $code, $module ) {
 		return $this->conn->dql("
-	        SELECT code
-	        FROM phas_phas p LEFT JOIN phas_groups g ON p.group_id = g.id
-	        WHERE module = ? AND name = ?
-	        ORDER BY version DESC
-	    ", array ( $module, $group ));
+	        SELECT v.content as code
+	        FROM phas_codes p 
+			LEFT JOIN phas_modules m ON p.module_id = m.id
+			LEFT JOIN phas_codeversions v ON v.code_id = p.id
+	        WHERE m.name = ? AND p.name = ?
+	        ORDER BY v.version DESC
+	    ", array ( $module, $code ));
 	}
 
 	public function getDB() {
@@ -67,16 +69,17 @@ class BackendSQL implements IBackend {
         return $mytypes;
     }
 
-    public function getFuncs( $group ) {
+    public function getFuncs( $module ) {
         $funcs_raw = $this->conn->dql("
-            SELECT p.module, a.name, t.xsd_name as param_type, r.name as return_type
-            FROM phas_phas p
-            LEFT JOIN phas_PhasAttrs a ON p.id = a.code_id
+            SELECT p.name AS module, a.name, p.doc, t.xsd_name as param_type, r.name as return_type
+            FROM phas_codes p
+            LEFT JOIN phas_CodeAttrs a ON p.id = a.code_id
             LEFT JOIN phas_TAD t ON t.id = a.tad_id
-            LEFT JOIN phas_TAD r ON r.id = p.return_attr_id
-            WHERE p.version = ( SELECT MAX(version) FROM phas_phas WHERE id = p.id )
-            AND p.group_id = ( SELECT id FROM phas_groups WHERE name = ? )
-        ", array ( $group ));
+			LEFT JOIN phas_codeversions v ON p.id = v.code_id
+            LEFT JOIN phas_TAD r ON r.id = v.return_attr_id
+            WHERE p.version = v.version
+            AND p.module_id = ( SELECT id FROM phas_modules WHERE name = ? )
+        ", array ( $module ));
         $funcs = array();
         if (is_array($funcs_raw) and count($funcs_raw) > 0) {
             foreach ($funcs_raw as $func) {
@@ -90,7 +93,7 @@ class BackendSQL implements IBackend {
                 if (!empty($func['return_type'])) {
                     $funcs[$func['module']]['return'] = $func['return_type'];
                 }
-                // TODO: falta el tipo 'doc' para la documentacion.
+				$funcs[$func['module']]['doc'] = $func['doc'];
             }
         }
         return $funcs;

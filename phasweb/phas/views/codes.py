@@ -9,16 +9,15 @@ from datetime import *
 from difflib import *
 
 def diff(request, code_id, src="0", dst="1"):
-	code = Phas.objects.get(pk=code_id)
-	codes = Phas.objects.filter(module=code.module, group__id=code.group_id)
-	# TODO: cambiar esto por versiones a elegir
-	code1 = codes[int(src)].code.splitlines(1)
-	code2 = codes[int(dst)].code.splitlines(1)
+	code = Codes.objects.get(pk=code_id)
+	codes = CodeVersions.objects.filter(code__id=code_id)
+	code1 = codes[int(src)].content.splitlines(1)
+	code2 = codes[int(dst)].content.splitlines(1)
 	diff = HtmlDiff()
 	diffs = diff.make_table(
 		code1, code2, 
-		codes[int(src)].module + "@" + str(codes[int(src)].version),
-		codes[int(dst)].module + "@" + str(codes[int(dst)].version))
+		codes[int(src)],
+		codes[int(dst)])
 	return render_to_response('codes/diff.html',{
 	    'titulo': 'Diferencias',
 	    'tipo': 'javascript',
@@ -32,33 +31,12 @@ def diff(request, code_id, src="0", dst="1"):
 
 def index(request, page_id = 1):
     page = int(page_id)
-    data = {}
-    raw = []
-    group_id = 0
-    if 'group' in request.REQUEST and request.REQUEST['group'] != '':
-        raw = Phas.objects.filter(group__id=request.REQUEST['group'])
-        group_id = request.REQUEST['group']
+    module_id = 0
+    if 'module' in request.REQUEST and request.REQUEST['module'] != '':
+        cod = Codes.objects.filter(module__id=request.REQUEST['module'])
+        module_id = request.REQUEST['module']
     else:
-        raw = Phas.objects.all()
-    for p in raw:
-        i = str(p.group_id) + '/' + p.module
-        if i not in data:
-            data[i] = p
-        else:
-            if data[i].version < p.version:
-                data[i] = p
-
-    cod = []
-    for k,v in data.iteritems():
-        cod.append(v)
-
-    for i in xrange(0,len(cod)-1):
-        k = i
-        for j in xrange(i+1, len(cod)):
-            if cod[j].id > cod[k].id:
-                k = j
-        if k != i:
-            cod[i], cod[k] = cod[k], cod[i]
+        cod = Codes.objects.all()
 
     codes = Paginator(cod, 5)
     page = codes.page(page)
@@ -72,41 +50,43 @@ def index(request, page_id = 1):
         'page_id': int(page_id),
         'titulo': 'Listado de Códigos',
         'tipo': 'javascript',
-		'group_id': int(group_id),
-		'grupos': Groups.objects.all(),
+		'module_id': int(module_id),
+		'modulos': Modules.objects.all(),
 		'filtro': True,
     })
 
 def edit(request, code_id=None):
     try:
         if code_id:
-            code = Phas.objects.get(pk=code_id)
+            code = Codes.objects.get(pk=code_id)
+            codever = CodeVersions.objects.filter(version=code.version, code__id=code_id)[0]
         else:
-            code = Phas()
+            code = Codes()
             code.version = 1
+            codever = CodeVersions()
+            codever.version = 1
         if request.method == 'POST':
-            if code_id:
-                form = PhasFormEdit(request.POST, instance=code, auto_id=False)
-            else:
-                form = PhasForm(request.POST, instance=code, auto_id=False)
-            if form.is_valid():
+            form = CodesForm(request.POST, instance=code, auto_id=False)
+            formVer = CodeVersionsForm(request.POST, instance=codever, auto_id=False)
+            if form.is_valid() and formVer.is_valid():
                 if code_id:
                     code.version += 1
-                    code.created_at = datetime.now()
-                    code.id = None
+                    codever.version += 1
+                    codever.id = None
                 form.save()
+                formVer.save()
                 return redirect('/code/')
         else:
-            if code_id:
-                form = PhasFormEdit(instance=code, auto_id=False)
-            else:
-                form = PhasForm(instance=code, auto_id=False)
-    except Phas.DoesNotExist:
+            form = CodesForm(instance=code, auto_id=False)
+            formVer = CodeVersionsForm(instance=codever, auto_id=False)
+    except Codes.DoesNotExist:
         raise Http404
 
     return render_to_response('codes/edit.html', {
         'form': form,
+        'formVer': formVer,
         'code': code,
+        'codever': codever,
         'button': 'modifica' if code_id else 'crear',
         'forms': [{
             'id': 'code',
@@ -117,6 +97,6 @@ def edit(request, code_id=None):
     }, context_instance=RequestContext(request))
 
 def delete(request, code_id):
-    code = Phas.objects.get(pk=code_id)
-    Phas.objects.filter(module=code.module).filter(group__id=code.group_id).delete()
+    CodeVersions.objects.filter(code__id=code_id).delete()
+    Codes.objects.get(pk=code_id).delete()
     return redirect('/code/')

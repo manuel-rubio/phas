@@ -1,0 +1,55 @@
+{% extends "table.html" %}
+
+{% block toolbar %}
+<a href="#" onclick="location.href='/module/new/';" class="toolbar">
+    <span class="icon-32-new hasTip" title="Nueva::Agrega una configuración nueva.">
+    </span>
+    Nueva
+</a>
+{% endblock %}
+
+{% block tabla %}
+<thead>
+    <tr>
+		<th nowrap="true">Módulo (Nombre)</th>
+		<th nowrap="true" colspan="2">Opciones</th>
+    </tr>
+</thead>
+<tfoot>
+    <tr>
+        <th colspan="3">
+			{% if modules|length > 0 %}
+        	<select name="page" onchange="location.href = '/module/' + this.options[this.selectedIndex].value + '/';">
+				{% for page in pages %}
+				<option value="{{ page }}"{% if page == page_id %} selected="true"{% endif %}>{{ page }}</option><!-- {{page}} - {{page_id}} -->
+				{% endfor %}
+			</select>
+			{% else %}
+			&nbsp;
+			{% endif %}
+        </th>
+    </tr>
+</tfoot>
+<tbody>
+    {% for module in modules %}
+        <tr class="{% cycle 'row0' 'row1' %}">
+			<td><span class="editlinktip hasTip" title="Módulo::{{ module.name }}"><a>{{ module.name }}</a></span></td>
+			<td align="center">
+                <a href="/module/{{ module.id }}/edit/">
+                    <img src="/static/images/edit_f2.png" class="hasTip" width="16px" height="16px" alt="Editar" title="Editar::edita un módulo" />
+                </a>
+                &nbsp;
+                <a href="/module/{{ module.id }}/delete/" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">
+                    <img src="/static/images/cancel_f2.png" class="hasTip" width="16px" height="16px" alt="Eliminar" title="Eliminar::elimina un módulo" />
+                </a>
+                &nbsp;
+                <a href="/code/?module={{ module.id }}">
+                    <img src="/static/images/address_f2.png" class="hasTip" width="16px" height="16px" alt="Codigos" title="Ver Códigos::visualiza los códigos que pertenecen al módulo" />
+                </a>
+			</td>
+		</tr>
+	{% empty %}
+	<tr class="row0"><td colspan="2" align="center">No hay registros.</td></tr>
+    {% endfor %}
+</tbody>
+{% endblock %}

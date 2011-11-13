@@ -77,12 +77,13 @@ class PHAS {
 	}
 
 	public function run() {
-	    if (!isset($this->request->group)) {
-	        return "Group not defined.";
+		global $log;
+	    if (!isset($this->request->module)) {
+	        return "Module not defined.";
 	    }
 	    if (isset($this->request->wsdl)) {
             header("Content-type: text/xml; charset=utf8");
-			$key = 'wsdl/' . $this->request->group;
+			$key = 'wsdl/' . $this->request->module;
 			if ($this->cache and isset($this->request->cache)) {
 				$data = $this->cache->get($key, $succ);
 				if ($succ) {
@@ -90,14 +91,14 @@ class PHAS {
 				}
 			}
             $wsdl = new WSDLGenerator($this->main);
-            $data = $wsdl->generate($this->request->group);
+            $data = $wsdl->generate($this->request->module);
 			if ($this->cache and isset($this->request->cache)) {
 				$this->cache->set($key, $data);
 			}
             return $data;
 	    }
 	    if (isset($this->request->soap)) {
-			$key = 'soap/' . $this->request->group . '/' . md5(http_get_request_body());
+			$key = 'soap/' . $this->request->module . '/' . md5(http_get_request_body());
 			if ($this->cache and isset($this->request->cache)) {
 				$data = $this->cache->get($key, $succ);
 				if ($succ) {
@@ -105,21 +106,19 @@ class PHAS {
 				}
 			}
             $wsdl = new WSDLGenerator($this->main);
-            $soap = new SoapGenerator($this->request->group, $wsdl, $this->main);
+            $soap = new SoapGenerator($this->request->module, $wsdl, $this->main);
             $this->configureDB();
-			ob_start();
-            $soap->handle($this->session_handler);
-			$response = ob_get_contents();
-			ob_end_clean();
+            $response = $soap->handle($this->session_handler);
 			if ($this->cache and isset($this->request->cache)) {
 				$this->cache->set($key, $response);
 			}
+			$log->log("Response SOAP: $response", PEAR_LOG_DEBUG);
             return $response;
 	    }
-        if (!isset($this->request->module)) {
-            return "Module not defined.";
+        if (!isset($this->request->code)) {
+            return "Code not defined.";
         }
-		$key = 'call/' . $this->request->group . '/' . $this->request->module . '/' . $this->request->output;
+		$key = 'call/' . $this->request->module . '/' . $this->request->code . '/' . $this->request->output;
 		if ($this->cache and isset($this->request->cache)) {
 			$data = $this->cache->get($key, $succ);
 			if ($succ) {
@@ -127,7 +126,7 @@ class PHAS {
 				return $data['resp'];
 			}
 		}
-	    $code = $this->checkModule();
+	    $code = $this->checkCode();
 	    $serializer = $this->checkOutput();
 	    $this->configureDB();
 	    $response = $this->evaluate($code, $serializer);
@@ -190,14 +189,14 @@ class PHAS {
 	    return $serializer($this->cleanup($data));
 	}
 
-	private function checkModule() {
+	private function checkCode() {
 	    global $log;
+	    $code = $this->request->code;
 	    $module = $this->request->module;
-	    $group = $this->request->group;
-	    $res = $this->main->getCode($module, $group);
+	    $res = $this->main->getCode($code, $module);
 
 	    if ((is_array($res) and count($res) == 0) or !is_array($res)) {
-	        $msg = "ERROR: modulo [$module] del grupo [$group] no encontrado";
+	        $msg = "ERROR: modulo [$code] del grupo [$module] no encontrado";
 	        $log->log($msg, PEAR_LOG_CRIT);
 	        print $msg; die;
 	    }

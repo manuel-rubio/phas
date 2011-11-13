@@ -1,9 +1,0 @@
-{% if databases %}
-    <ul>
-    {% for database in databases %}
-        <li><a href="/phasweb/database/{{ database.id }}/">{{ database.name }}</a></li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No hay bases de datos configuradas.</p>
-{% endif %}

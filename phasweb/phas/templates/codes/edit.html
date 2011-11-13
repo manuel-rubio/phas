@@ -44,17 +44,8 @@
             <tr>
                 <td width="100%">
                     <table class="admintable" cellspacing="1">
-						{% if code.id != None %}
-						<tr>
-							<th>Nombre del Módulo:</th>
-							<td><input type="text" readonly="true" name="module" value="{{ code.module }}" maxlength="50" /></td>
-						</tr>
-						<tr>
-							<th>Grupo:</th>
-							<td><input type="hidden" name="group" value="{{ code.group_id }}" /><input type="text" readonly="true" value="{{ code.group.name }}" maxlength="50" /></td>
-						</tr>
-						{% endif %}
  						{{ form.as_table }}
+						{{ formVer.as_table }}
                     </table>
 				</td>
 			</tr>

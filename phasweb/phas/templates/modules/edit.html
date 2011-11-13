@@ -1,7 +1,7 @@
 {% extends "forms.html" %}
 
 {% block toolbar %}
-<a href="#" onclick="location.href='/group/';" class="toolbar">
+<a href="#" onclick="location.href='/module/';" class="toolbar">
     <span class="icon-32-back hasTip" title="Volver::Ignora los cambios y vuelve al listado.">
     </span>
     Volver
@@ -11,8 +11,8 @@
     </span>
     {{ button|capfirst }}
 </a>
-{% if group.id %}
-<a href="#" onclick="location.href='/group/{{ group.id }}/delete/';" class="toolbar">
+{% if module.id %}
+<a href="#" onclick="location.href='/module/{{ module.id }}/delete/';" class="toolbar">
     <span class="icon-32-cancel hasTip" title="Elimina::Elimina el registro.">
     </span>
     Elimina
@@ -21,14 +21,14 @@
 {% endblock %}
 
 {% block formulario %}
-{% if group.id == None %}
-<form name="{{ form_name|default:"myform" }}" action="/group/new/" method="post">
+{% if module.id == None %}
+<form name="{{ form_name|default:"myform" }}" action="/module/new/" method="post">
 {% else %}
-<form name="{{ form_name|default:"myform" }}" action="/group/{{ group.id }}/edit/" method="post">
+<form name="{{ form_name|default:"myform" }}" action="/module/{{ module.id }}/edit/" method="post">
 {% endif %}
     {% csrf_token %}
     <div id="config-document">
-    <div id="page-group">
+    <div id="page-module">
         <table class="noshow">
             <tr>
                 <td width="100%">

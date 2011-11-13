@@ -12,38 +12,31 @@ class DatabasesForm(forms.ModelForm):
     class Meta:
         model = Databases
 
-class GroupsForm(forms.ModelForm):
-    name = forms.CharField(label='Nombre de Grupo', required=True)
+class ModulesForm(forms.ModelForm):
+    name = forms.CharField(label='Nombre del Módulo', required=True)
     class Meta:
-        model = Groups
+        model = Modules
 
-class PhasFormEdit(forms.ModelForm):
-	code = forms.CharField(label='Código', required=True,
-		widget=forms.Textarea(attrs={'rows':'20', 'cols':'80', 'id':'mycode_textarea'})
-	)
-	version = forms.IntegerField(label='Versión',
-		widget=forms.TextInput(attrs={'readonly':'true'})
-	)
-	return_attr = forms.ModelChoiceField(label='Retorno (SOAP)', 
-		required=False, queryset=TAD.objects.all()
-	)
-	class Meta:
-		model = Phas
-		exclude = ( 'created_at', 'module', 'group' )
+class CodesForm(forms.ModelForm):
+    name = forms.CharField(label='Nombe', required=True)
+    module = forms.ModelChoiceField(label='Módulo', required=True, queryset=Modules.objects.all())
+    doc = forms.CharField(label='Documentación (WSDL)', required=False,
+        widget=forms.Textarea(attrs={'rows':'3', 'cols':'80'})
+    )
+    class Meta:
+        model = Codes
+        exclude = ( 'created_at', 'updated_at', 'version' )
 
-class PhasForm(forms.ModelForm):
-	module = forms.CharField(label='Nombe del Módulo', required=True)
-	group = forms.ModelChoiceField(label='Grupo', required=True, queryset=Groups.objects.all())
-	code = forms.CharField(label='Código', required=True,
-		widget=forms.Textarea(attrs={'rows':'20', 'cols':'80'})
-	)
-	version = forms.IntegerField(label='Versión',
-		widget=forms.TextInput(attrs={'readonly':'true'})
-	)
-	return_attr = forms.ModelChoiceField(label='Retorno (SOAP)', 
-		required=False, queryset=TAD.objects.all()
-	)
-	class Meta:
-		model = Phas
-		exclude = ( 'created_at' )
-
+class CodeVersionsForm(forms.ModelForm):
+    content = forms.CharField(label='Código', required=True,
+        widget=forms.Textarea(attrs={'rows':'20', 'cols':'80', 'id': 'mycode_textarea'})
+    )
+    version = forms.IntegerField(label='Versión',
+        widget=forms.TextInput(attrs={'readonly':'true'})
+    )
+    return_attr = forms.ModelChoiceField(label='Retorno (SOAP)', 
+        required=False, queryset=TAD.objects.all()
+    )
+    class Meta:
+        model = CodeVersions
+        exclude = ( 'code', )
