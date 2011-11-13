@@ -80,11 +80,10 @@ class WSDLGenerator {
                str_repeat(" ", 9) . "</operation>\n";
     }
 
-    public function generate($group) {
+    public function generate($module) {
         global $wsdl_url;
-        $module = $group;
         $ret = "";
-        $funcs = $this->main->getFuncs($group);
+        $funcs = $this->main->getFuncs($module);
         if (!empty($funcs)) {
             $types = "";
             foreach ($this->mytypes as $mytype => $parts) {
@@ -110,7 +109,7 @@ class WSDLGenerator {
             if (empty($wsdl_url)) {
                 $wsdl_url = "http://" . $_SERVER['SERVER_NAME'] . ":" .
                     $_SERVER['SERVER_PORT'] . $_SERVER['PHP_SELF'] .
-                    '?group=' . $group . '&#38;soap';
+                    '?module=' . $module . '&#38;soap';
             }
             $ret = <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
