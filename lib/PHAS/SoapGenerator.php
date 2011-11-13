@@ -36,6 +36,7 @@ class SoapGenerator {
         ActionJS::$js = new JS($log, $session);
         ActionJS::$main =& $this->main;
         ActionJS::$log =& $log;
+		ActionJS::$request = new Request();
         $a = new ActionJS();
 		ob_start();
         $this->soap_server->handle();
@@ -43,14 +44,16 @@ class SoapGenerator {
 		ob_end_clean();
         $log->log("SOAP: return [$response]", PEAR_LOG_INFO);
         ActionJS::$js = null;
-        return $res;
+        return $response;
     }
 
     private function generateClass( &$main, $module ) {
+		global $log;
         $class_data = 'class ActionJS {
             public static $main;
             public static $js;
             public static $log;
+			public static $request;
 
             private function cleanup( $data ) {
                 $p = array();

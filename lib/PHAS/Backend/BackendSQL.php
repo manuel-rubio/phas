@@ -70,7 +70,8 @@ class BackendSQL implements IBackend {
     }
 
     public function getFuncs( $module ) {
-        $funcs_raw = $this->conn->dql("
+		global $log;
+        $sql = "
             SELECT p.name AS module, a.name, p.doc, t.xsd_name as param_type, r.name as return_type
             FROM phas_codes p
             LEFT JOIN phas_CodeAttrs a ON p.id = a.code_id
@@ -79,7 +80,10 @@ class BackendSQL implements IBackend {
             LEFT JOIN phas_TAD r ON r.id = v.return_attr_id
             WHERE p.version = v.version
             AND p.module_id = ( SELECT id FROM phas_modules WHERE name = ? )
-        ", array ( $module ));
+        ";
+		$funcs_raw = $this->conn->dql($sql, array ( $module ));
+		$log->log("SQL: $sql", PEAR_LOG_DEBUG);
+		$log->log("Resultset: " . print_r($funcs_raw, true), PEAR_LOG_DEBUG);
         $funcs = array();
         if (is_array($funcs_raw) and count($funcs_raw) > 0) {
             foreach ($funcs_raw as $func) {

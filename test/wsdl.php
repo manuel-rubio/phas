@@ -27,5 +27,6 @@ $main->dml("UPDATE phas_codeversions SET return_attr_id = ? WHERE code_id = (SEL
     array ( 6, 'vsn' ),
 ));
 
-$api = new SoapClient("http://localhost/~bombadil/phas/?module=test&wsdl");
+$api = new SoapClient("http://bosqueviejo.com/phas/?module=test&wsdl", array ( 'cache_wsdl' => WSDL_CACHE_NONE ));
 print_r($api->vsn());
+

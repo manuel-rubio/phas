@@ -27,5 +27,6 @@ if (is_array($data) and count($data) == 0) {
 
 $main->dml("DELETE FROM phas_codeversions WHERE code_id = (SELECT id FROM phas_codes WHERE name = 'vsn')");
 $main->dml("DELETE FROM phas_codes WHERE name = 'vsn'");
-$main->dml("INSERT INTO phas_codes( name, module_id, created_at, updated_at ) VALUES ( ?, ( SELECT id FROM phas_modules WHERE name = ? ), ?, ? )", array ( array ( 'vsn', 'test', date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
+$main->dml("INSERT INTO phas_codes( name, module_id, version, created_at, updated_at ) VALUES ( ?, ( SELECT id FROM phas_modules WHERE name = ? ), ?, ?, ? )", array ( array ( 'vsn', 'test', 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
 $main->dml("INSERT INTO phas_codeversions( content, version, code_id ) VALUES ( ?, ?, (SELECT id FROM phas_codes WHERE name = 'vsn' ) )", array ( array ( $script, 1 ) ) );
+

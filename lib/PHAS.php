@@ -87,6 +87,7 @@ class PHAS {
 			if ($this->cache and isset($this->request->cache)) {
 				$data = $this->cache->get($key, $succ);
 				if ($succ) {
+					$log->log("Hit: $key", PEAR_LOG_INFO);
 					return $data;
 				}
 			}

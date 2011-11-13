@@ -81,7 +81,7 @@ class WSDLGenerator {
     }
 
     public function generate($module) {
-        global $wsdl_url;
+        global $log, $wsdl_url;
         $ret = "";
         $funcs = $this->main->getFuncs($module);
         if (!empty($funcs)) {
@@ -161,7 +161,9 @@ $operations_bind
     </service>
 </definitions>
 EOF;
-        }
+        } else {
+			$log->log("No funcs in [$module]", PEAR_LOG_INFO);
+		}
         return $ret;
     }
 }

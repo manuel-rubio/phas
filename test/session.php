@@ -24,7 +24,7 @@ EOF;
 
 $main->dml("DELETE FROM phas_codeversions WHERE code_id = (SELECT id FROM phas_codes WHERE name = 'sess_put')");
 $main->dml("DELETE FROM phas_codes WHERE name = 'sess_put'");
-$main->dml("INSERT INTO phas_codes( name, module_id, created_at, updated_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'sess_put', 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
+$main->dml("INSERT INTO phas_codes( name, module_id, version, created_at, updated_at ) VALUES ( ?, ?, ?, ?, ? )", array ( array ( 'sess_put', 1, 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
 $main->dml("INSERT INTO phas_codeversions( content, version, code_id ) VALUES ( ?, ?, (SELECT id FROM phas_codes WHERE name = ? ) )", array ( array ( $script, 1, 'sess_put' ) ) );
 
 $script = <<<EOF
@@ -33,5 +33,5 @@ EOF;
 
 $main->dml("DELETE FROM phas_codeversions WHERE code_id = (SELECT id FROM phas_codes WHERE name = 'sess_get')");
 $main->dml("DELETE FROM phas_codes WHERE name = 'sess_get'");
-$main->dml("INSERT INTO phas_codes( name, module_id, created_at, updated_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'sess_get', 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
+$main->dml("INSERT INTO phas_codes( name, module_id, version, created_at, updated_at ) VALUES ( ?, ?, ?, ?, ? )", array ( array ( 'sess_get', 1, 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
 $main->dml("INSERT INTO phas_codeversions( content, version, code_id ) VALUES ( ?, ?, (SELECT id FROM phas_codes WHERE name = ? ) )", array ( array ( $script, 1, 'sess_get' ) ) );

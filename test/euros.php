@@ -65,7 +65,7 @@ if (is_array($data) and count($data) == 0) {
 
 $main->dml("DELETE FROM phas_codeversions WHERE code_id = (SELECT id FROM phas_codes WHERE name = 'euros')");
 $main->dml("DELETE FROM phas_codes WHERE name = 'euros'");
-$main->dml("INSERT INTO phas_codes( name, module_id, created_at, updated_at ) VALUES ( ?, ?, ?, ? )", array ( array ( 'euros', 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
+$main->dml("INSERT INTO phas_codes( name, module_id, version, created_at, updated_at ) VALUES ( ?, ?, ?, ?, ? )", array ( array ( 'euros', 1, 1, date('Y-m-d H:i:s'), date('Y-m-d H:i:s') ) ) );
 $main->dml("INSERT INTO phas_codeversions( content, version, code_id ) VALUES ( ?, ?, (SELECT id FROM phas_codes WHERE name = ? ) )", array ( array ( $script, 1, 'euros' ) ) );
 
 $main->dml("INSERT INTO phas_databases( name, DSN ) VALUES ( 'euros', 'sqlite:" . __DIR__ . "/../euros.sqlite' )");
