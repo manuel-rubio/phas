@@ -32,7 +32,7 @@ class BackendSQL implements IBackend {
         $raw = $this->conn->dql("
             SELECT name, xsd_name
             FROM phas_TAD
-            WHERE complex = 0
+            WHERE tad_type = 'S'
         ");
         $types = array();
         if (is_array($raw) and count($raw) > 0) {
@@ -45,23 +45,28 @@ class BackendSQL implements IBackend {
 
     public function getMyTypes( $types ) {
         $raw = $this->conn->dql("
-            SELECT t.name, t.xsd_name, a.name AS attr_name
+            SELECT t.name, t.xsd_name, a.name AS attr_name, 
+                   d.name AS type, t.tad_type,
+                   a.min_occurs, a.max_occurs
             FROM phas_TAD t
             LEFT JOIN phas_TADAttrs a ON t.id = a.tad_id
-            WHERE complex = 1
+			LEFT JOIN phas_TAD d ON d.id = a.tad_type_id
+            WHERE t.tad_type IN ( 'A', 'C' )
         ");
         $mytypes = array();
         if (is_array($raw) and count($raw) > 0) {
             foreach ($raw as $data) {
                 $mytypes[$data['name']]['xsd_name'] = $data['xsd_name'];
-                if (!isset($types[$data['name']]['attrs'])) {
+				$mytypes[$data['name']]['type'] = $data['tad_type'];
+                if (!isset($mytypes[$data['name']]['attrs'])) {
                     $mytypes[$data['name']]['attrs'] = array ();
                 }
                 if (!empty($data['attr_name'])) {
                     $mytypes[$data['name']]['attrs'][] = array (
                         'name' => $data['attr_name'],
                         'type' => $data['type'],
-                        'dim' => $data['dim']
+						'min' => $data['min_occurs'],
+						'max' => $data['max_occurs']
                     );
                 }
             }

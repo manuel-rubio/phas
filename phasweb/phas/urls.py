@@ -26,4 +26,10 @@ urlpatterns = patterns('phas.views',
 	url(r'^code/new/$', 'codes.edit'),
 	url(r'^code/diff/(?P<code_id>\d+)/$', 'codes.diff'),
 	url(r'^code/diff/(?P<code_id>\d+)/(?P<src>\d+)/(?P<dst>\d+)/$', 'codes.diff'),
+	
+	url(r'^soap/$', 'soap.index'),
+	url(r'^soap/(?P<page_id>\d+)/$', 'soap.index'),
+	url(r'^soap/(?P<tad_id>\d+)/edit/$', 'soap.edit'),
+	url(r'^soap/(?P<tad_id>\d+)/delete/$', 'soap.delete'),
+	url(r'^soap/new/$', 'soap.edit'),
 )

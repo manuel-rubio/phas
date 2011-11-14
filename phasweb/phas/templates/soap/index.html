@@ -1,0 +1,57 @@
+{% extends "table.html" %}
+
+{% block toolbar %}
+<a href="#" onclick="location.href='{% url phas.views.soap.edit %}';" class="toolbar">
+    <span class="icon-32-new hasTip" title="Nuevo::Agrega un código nuevo.">
+    </span>
+    Nuevo
+</a>
+{% endblock %}
+
+{% block tabla %}
+<thead>
+    <tr>
+		<th nowrap="true">Nombre</th>
+		<th nowrap="true">¿Complejo?</th>
+		<th nowrap="true">Nombre XML</th>
+		<th nowrap="true">Atributos</th>
+		<th nowrap="true" colspan="2">Opciones</th>
+    </tr>
+</thead>
+<tfoot>
+    <tr>
+        <th colspan="5">
+			{% if tads|length > 0 %}
+        	<select name="page" onchange="location.href = '{% url phas.views.soap.index %}' + this.options[this.selectedIndex].value + '/';">
+				{% for page in pages %}
+				<option value="{{ page }}"{% if page == page_id %} selected="true"{% endif %}>{{ page }}</option>
+				{% endfor %}
+			</select>
+			{% else %}
+			&nbsp;
+			{% endif %}
+        </th>
+    </tr>
+</tfoot>
+<tbody>
+    {% for tad in tads %}
+        <tr class="{% cycle 'row0' 'row1' %}">
+			<td><a>{{ tad.name }}</a></td>
+			<td align="center"><a><img src="/static/images/{% if tad.tad_type != 'S' %}menu/icon-16-checkin{% else %}cancel_f2{% endif %}.png" width="16px" height="16px" /></a></td>
+			<td><a>{{ tad.xsd_name }}</a></td>
+			<td align="right"><a>{{ tad.tadattrs_set.count }}</a>&nbsp;</td>
+            <td align="center">
+                <a href="{% url phas.views.soap.edit tad.id %}">
+                    <img src="/static/images/edit_f2.png" class="hasTip" width="16px" height="16px" alt="Editar" title="Editar::edita un TAD" />
+                </a>
+                &nbsp;
+                <a href="{% url phas.views.soap.delete tad.id %}" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">
+                    <img src="/static/images/cancel_f2.png" class="hasTip" width="16px" height="16px" alt="Eliminar" title="Eliminar::elimina un TAD" />
+                </a>
+            </td>
+		</tr>
+	{% empty %}
+	<tr class="row0"><td colspan="4" align="center">No hay registros.</td></tr>
+    {% endfor %}
+</tbody>
+{% endblock %}

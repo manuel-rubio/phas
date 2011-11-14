@@ -40,3 +40,12 @@ class CodeVersionsForm(forms.ModelForm):
     class Meta:
         model = CodeVersions
         exclude = ( 'code', )
+
+class TADForm(forms.ModelForm):
+	name = forms.CharField(label='Nombre', required=True)
+	xsd_name = forms.CharField(label='Nombre XML', required=True)
+	tad_type = forms.ChoiceField(label='Tipo de Dato', required=True,
+		choices=TAD.TYPE_CHOICES
+	)
+	class Meta:
+		model = TAD

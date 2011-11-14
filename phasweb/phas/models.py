@@ -33,23 +33,31 @@ class CodeVersions(models.Model):
 
 class CodeAttrs(models.Model):
     name = models.CharField(max_length=50)
-    tad = models.ForeignKey('TAD', blank=True, null=True)
-    code = models.ForeignKey('CodeVersions', blank=True, null=True)
+    tad = models.ForeignKey('TAD')
+    code = models.ForeignKey('CodeVersions')
 
     def __unicode__(self):
         return self.tad + " " + self.name
 
 class TAD(models.Model):
     name = models.CharField(max_length=50)
-    complex = models.BooleanField(default=False)
     xsd_name = models.CharField(max_length=50)
+    TYPE_CHOICES = (
+        ( 'S', 'Simple' ),
+        ( 'C', 'Complejo' ),
+        ( 'A', 'Array' ),
+    )
+    tad_type = models.CharField(max_length=1, default='S', choices=TYPE_CHOICES)
 
     def __unicode__(self):
         return self.name
 
 class TADAttrs(models.Model):
     name = models.CharField(max_length=50)
-    tad = models.ForeignKey('TAD', blank=True, null=True)
+    tad = models.ForeignKey('TAD')
+    tad_type = models.ForeignKey('TAD', related_name='+')
+    min_occurs = models.IntegerField(default=0)
+    max_occurs = models.IntegerField(default=1)
 
     def __unicode__(self):
         return self.name

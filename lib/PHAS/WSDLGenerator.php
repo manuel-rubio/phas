@@ -12,7 +12,7 @@ class WSDLGenerator {
         $this->mytypes = $main->getMyTypes( $this->types );
     }
 
-    private function getType( $type, $min_max = false ) {
+    private function getType( $type ) {
         $vector = "";
         $tipo_dato = "xsd:string";
         if (isset($this->types[$type])) {
@@ -31,15 +31,18 @@ class WSDLGenerator {
 
     private function complexType( $name, $elements ) {
         $elements_txt = "";
-        foreach ($elements as $element) {
-            list($type, $min, $max) = $this->getType($element['type'], true);
-            $elements_txt .= $this->element($element['name'], $type, $min, $max);
+        foreach ($elements['attrs'] as $element) {
+            $type = $this->getType($element['type']);
+            $elements_txt .= $this->element($element['name'], $type, $element['min'], $element['max'] == '-1' ? 'unbound' : $element['max']);
         }
-        return str_repeat(" ", 13) . "<complexType name=\"$name\">\n" .
-               str_repeat(" ", 17) . "<sequence>\n" . $elements_txt .
-               str_repeat(" ", 17) . "</sequence>\n" .
-               str_repeat(" ", 13) . "</complexType>\n" .
-               str_repeat(" ", 13) . "<complexType name=\"ArrayOf$name\">\n" .
+		if ($elements['type'] == 'C') {
+	        return str_repeat(" ", 13) . "<complexType name=\"$name\">\n" .
+	               str_repeat(" ", 17) . "<sequence>\n" . $elements_txt .
+	               str_repeat(" ", 17) . "</sequence>\n" .
+	               str_repeat(" ", 13) . "</complexType>\n";
+		}
+		// tad_type == 'A'
+		return str_repeat(" ", 13) . "<complexType name=\"ArrayOf$name\">\n" .
                str_repeat(" ", 17) . "<complexContent>\n" .
                str_repeat(" ", 21) . "<restriction base=\"soapenc:Array\">\n" .
                str_repeat(" ", 25) . "<attribute ref=\"soapenc:arrayType\" wsdl:arrayType=\"tns:{$name}[]\" />\n" .
