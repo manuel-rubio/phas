@@ -6,7 +6,7 @@ class DatabasesForm(forms.ModelForm):
     name = forms.CharField(label='Nombre')
     USR = forms.CharField(label='Usuario', required=False)
     PWD = forms.CharField(label='Clave', required=False)
-    DSN = forms.CharField(label='DSN', 
+    DSN = forms.CharField(label='DSN',
         widget=forms.TextInput(attrs={'size':'100'})
     )
     class Meta:
@@ -17,15 +17,28 @@ class ModulesForm(forms.ModelForm):
     class Meta:
         model = Modules
 
-class CodesForm(forms.ModelForm):
-    name = forms.CharField(label='Nombe', required=True)
-    module = forms.ModelChoiceField(label='Módulo', required=True, queryset=Modules.objects.all())
-    doc = forms.CharField(label='Documentación (WSDL)', required=False,
+class CodesSOAPForm(forms.ModelForm):
+    doc = forms.CharField(label='Documentación', required=False,
         widget=forms.Textarea(attrs={'rows':'3', 'cols':'80'})
     )
     class Meta:
         model = Codes
-        exclude = ( 'created_at', 'updated_at', 'version' )
+        exclude = ( 'created_at', 'updated_at', 'version', 'name', 'module' )
+
+class CodesForm(forms.ModelForm):
+    name = forms.CharField(label='Nombe', required=True)
+    module = forms.ModelChoiceField(label='Módulo', required=True, queryset=Modules.objects.all())
+    class Meta:
+        model = Codes
+        exclude = ( 'created_at', 'updated_at', 'version', 'doc' )
+
+class CodeVersionsSOAPForm(forms.ModelForm):
+    return_attr = forms.ModelChoiceField(label='Retorno',
+        required=False, queryset=TAD.objects.all()
+    )
+    class Meta:
+        model = CodeVersions
+        exclude = ( 'code', 'content', 'version' )
 
 class CodeVersionsForm(forms.ModelForm):
     content = forms.CharField(label='Código', required=True,
@@ -34,12 +47,9 @@ class CodeVersionsForm(forms.ModelForm):
     version = forms.IntegerField(label='Versión',
         widget=forms.TextInput(attrs={'readonly':'true'})
     )
-    return_attr = forms.ModelChoiceField(label='Retorno (SOAP)', 
-        required=False, queryset=TAD.objects.all()
-    )
     class Meta:
         model = CodeVersions
-        exclude = ( 'code', )
+        exclude = ( 'code', 'return_attr' )
 
 class TADForm(forms.ModelForm):
 	name = forms.CharField(label='Nombre', required=True)

@@ -39,24 +39,24 @@
 {% endif %}
     {% csrf_token %}
     <div id="config-document">
-    <div id="page-code">
-        <table class="noshow">
-            <tr>
-                <td width="100%">
-                    <table class="admintable" cellspacing="1">
- 						{{ form.as_table }}
-						{{ formVer.as_table }}
-                    </table>
-				</td>
-			</tr>
-		</table>
-		<script type="text/javascript"><!--
-		var editor = CodeMirror.fromTextArea(document.getElementById("mycode_textarea"), {
-		        lineNumbers: true,
-		        matchBrackets: true
-		      });
-		//--></script>
-	</div>
-	</div>
+        <div id="page-code">
+            <table class="noshow">
+                <tr>
+                    <td width="100%">
+                        <table class="admintable" cellspacing="1">
+                            {{ form.as_table }}
+                            {{ formVer.as_table }}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </form>
+<script type="text/javascript"><!--
+var editor = CodeMirror.fromTextArea(document.getElementById("mycode_textarea"), {
+        lineNumbers: true,
+        matchBrackets: true
+    });
+//--></script>
 {% endblock %}

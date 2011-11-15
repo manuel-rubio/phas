@@ -43,7 +43,6 @@ class TAD(models.Model):
     name = models.CharField(max_length=50)
     xsd_name = models.CharField(max_length=50)
     TYPE_CHOICES = (
-        ( 'S', 'Simple' ),
         ( 'C', 'Complejo' ),
         ( 'A', 'Array' ),
     )

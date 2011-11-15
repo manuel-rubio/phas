@@ -1,0 +1,114 @@
+{% extends "forms.html" %}
+
+{% block switcher %}
+{% endblock %}
+
+{% block toolbar %}
+<a href="#" onclick="location.href='/code/';" class="toolbar">
+    <span class="icon-32-back hasTip" title="Volver::Ignora los cambios y vuelve al listado.">
+    </span>
+    Volver
+</a>
+<a href="#" onclick="forms[0].submit();" class="toolbar">
+    <span class="icon-32-save hasTip" title="{{ button|capfirst }}::Almacena la información.">
+    </span>
+    {{ button|capfirst }}
+</a>
+{% endblock %}
+
+{% block formulario %}
+<form name="{{ form_name|default:"myform" }}" action="{% url phas.views.codes.publish code.id %}" method="post">
+    {% csrf_token %}
+    <div id="config-document">
+        <div id="page-code">
+            <table class="noshow">
+                <tr>
+                    <td width="100%">
+                        <table id="form-dynamic" class="admintable" cellspacing="1">
+                            {{ form.as_table }}
+                            {{ formVer.as_table }}
+                            <tr class="complex">
+                                <th id="head-attr" rowspan="1">Atributos</th>
+                                <td><input type="button" value="Agrega atributo" onclick="addAttr()" /></td>
+                            </tr>
+                            {% for attr in attrs %}
+                            <tr class="complex">
+                                <th></th>
+                                <td>
+                                    <select name="attr_tad">
+                                    {% for t in tads %}
+                                        <option value="{{ t.id }}"{% if t.id == attr|last %} selected="true"{% endif %}>{{ t.name }}</option>
+                                    {% endfor %}
+                                    </select>
+                                    <input type="text" name="attr_name" value="{{ attr|first }}" />
+                                    <input type="button" value="-" onclick="remAttr(this);" />
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </table>
+                        <script type="text/javascript"><!--
+                        function addAttr() {
+                            var newtr = document.createElement('tr');
+                            newtr.setAttribute('class', 'complex');
+                            newtr.appendChild(document.createElement('th'));
+                            var newtd = document.createElement('td');
+
+                            var newin = document.createElement('select');
+                            newin.setAttribute('name', 'attr_tad')
+
+                            var elements = [
+                            {% for t in tads %}
+                                [ {{ t.id }}, '{{ t.name }}' ],
+                            {% endfor %}
+                            ];
+                            for (var i=0; i<elements.length; i++) {
+                                var newopt = document.createElement('option');
+                                newopt.setAttribute('value', elements[i][0]);
+                                newopt.appendChild(document.createTextNode(elements[i][1]));
+                                newin.appendChild(newopt);
+                            }
+
+                            var newtxt = document.createElement('input');
+                            newtxt.setAttribute('type', 'text');
+                            newtxt.setAttribute('name', 'attr_name');
+
+                            var newbtn = document.createElement('input');
+                            newbtn.setAttribute('type', 'button');
+                            newbtn.setAttribute('value', '-');
+                            newbtn.setAttribute('onclick', "remAttr(this);");
+
+                            var parent_node = document.getElementById('form-dynamic');
+                            newtd.appendChild(newin);
+                            newtd.appendChild(document.createTextNode(' '));
+                            newtd.appendChild(newtxt);
+                            newtd.appendChild(document.createTextNode(' '));
+                            newtd.appendChild(newbtn);
+
+                            newtr.appendChild(newtd);
+                            parent_node.appendChild(newtr);
+                        }
+
+                        function remAttr( o ) {
+                            var tupla = o.parentNode.parentNode;
+                            var padre = document.getElementById('form-dynamic');
+                            try {
+                                padre.removeChild(tupla);
+                            } catch (err) {
+                                padre.appendChild(tupla);
+                                padre.removeChild(tupla);
+                            }
+                        }
+                        //--></script>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>
+<script type="text/javascript"><!--
+var editor = CodeMirror.fromTextArea(document.getElementById("mycode_textarea"), {
+        lineNumbers: true,
+        matchBrackets: true
+    });
+//--></script>
+{% endblock %}
