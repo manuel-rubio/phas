@@ -25,23 +25,26 @@ CREATE TABLE "phas_codeversions" (
 CREATE TABLE "phas_codeattrs" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(50) NOT NULL,
-    "tad_id" integer,
-    "code_id" integer REFERENCES "phas_codeversions" ("id") DEFERRABLE INITIALLY DEFERRED
+    "tad_id" integer NOT NULL,
+    "code_id" integer NOT NULL REFERENCES "phas_codeversions" ("id") DEFERRABLE INITIALLY DEFERRED
 )
 ;
 CREATE TABLE "phas_tad" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(50) NOT NULL,
-    "complex" boolean NOT NULL,
-    "xsd_name" varchar(50) NOT NULL
+    "xsd_name" varchar(50) NOT NULL,
+    "tad_type" varchar(1) NOT NULL
 )
 ;
-ALTER TABLE "phas_codeversions" ADD CONSTRAINT "return_attr_id_refs_id_5060ec59" FOREIGN KEY ("return_attr_id") REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED;
-ALTER TABLE "phas_codeattrs" ADD CONSTRAINT "tad_id_refs_id_63c0d967" FOREIGN KEY ("tad_id") REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE "phas_codeversions" ADD CONSTRAINT "return_attr_id_refs_id_af9f13a7" FOREIGN KEY ("return_attr_id") REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED;
+ALTER TABLE "phas_codeattrs" ADD CONSTRAINT "tad_id_refs_id_9c3f2699" FOREIGN KEY ("tad_id") REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED;
 CREATE TABLE "phas_tadattrs" (
     "id" serial NOT NULL PRIMARY KEY,
     "name" varchar(50) NOT NULL,
-    "tad_id" integer REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED
+    "tad_id" integer NOT NULL REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "tad_type_id" integer NOT NULL REFERENCES "phas_tad" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "min_occurs" integer NOT NULL,
+    "max_occurs" integer NOT NULL
 )
 ;
 CREATE TABLE "phas_databases" (
@@ -58,5 +61,6 @@ CREATE INDEX "phas_codeversions_code_id" ON "phas_codeversions" ("code_id");
 CREATE INDEX "phas_codeattrs_tad_id" ON "phas_codeattrs" ("tad_id");
 CREATE INDEX "phas_codeattrs_code_id" ON "phas_codeattrs" ("code_id");
 CREATE INDEX "phas_tadattrs_tad_id" ON "phas_tadattrs" ("tad_id");
+CREATE INDEX "phas_tadattrs_tad_type_id" ON "phas_tadattrs" ("tad_type_id");
 COMMIT;
 
