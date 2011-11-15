@@ -15,15 +15,15 @@
   <email>bombadil@bosqueviejo.net</email>
   <active>yes</active>
  </lead>
- <date>2011-11-10</date>
- <time>17:06:00</time>
+ <date>2011-11-15</date>
+ <time>19:48:15</time>
  <version>
-  <release>1.0.1</release>
-  <api>1.0.1</api>
+  <release>1.1.0</release>
+  <api>1.1.0</api>
  </version>
  <stability>
-  <release>stable</release>
-  <api>stable</api>
+  <release>beta</release>
+  <api>beta</api>
  </stability>
  <license uri="http://www.gnu.org/licenses/gpl.html">GPL</license>
  <notes>-</notes>
