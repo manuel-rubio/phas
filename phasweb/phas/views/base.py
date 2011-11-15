@@ -9,4 +9,5 @@ def index(request):
 		'modules': Modules.objects.count(),
 		'codes': len(Codes.objects.values_list('module_id', 'name').distinct()),
 		'databases': Databases.objects.count(),
+		'tads': TAD.objects.exclude(tad_type='S').count(),
 	})
