@@ -1,9 +1,9 @@
 <?php
 
-include(__DIR__ . "/../lib/PHAS/Session/MemcacheSession.php");
+include(__DIR__ . "/../lib/PHAS/Session.php");
 
-$memcache_host = 'localhost';
-$memcache_port = "11211";
+$session_memcache_host = 'localhost';
+$session_memcache_port = "11211";
 $session_expires = 2;
 
 $sess = new MemcacheSession('aaaa');

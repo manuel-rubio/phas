@@ -49,15 +49,19 @@
 			<td align="right"><a>{{ code.version }}</a>&nbsp;</td>
             <td align="center">
                 <a href="{% url phas.views.codes.edit code.id %}">
-                    <img src="/static/images/edit_f2.png" class="hasTip" width="16px" height="16px" alt="Editar" title="Editar::edita un código" />
+                    <img src="/static/images/edit_f2.png" class="hasTip" width="16px" height="16px" alt="E" title="Editar::edita un código" />
                 </a>
                 &nbsp;
                 <a href="{% url phas.views.codes.delete code.id %}" onclick="return confirm('¿Está seguro de que dese eliminar este registro?');">
-                    <img src="/static/images/cancel_f2.png" class="hasTip" width="16px" height="16px" alt="Eliminar" title="Eliminar::elimina un código" />
+                    <img src="/static/images/cancel_f2.png" class="hasTip" width="16px" height="16px" alt="B" title="Eliminar::elimina un código" />
                 </a>
                 &nbsp;
-                <a{% if code.version > 1 %} href="/code/diff/{{ code.id }}"{% endif %}>
-                    <img src="/static/images/history{% if code.version > 1 %}_f2{% endif %}.png" class="hasTip" width="16px" height="16px" alt="Codigos" title="Ver Diferencias::visualiza las diferencias que se han ido insertando en el código." />
+                <a{% if code.version > 1 %} href="{% url phas.views.codes.diff code.id %}"{% endif %}>
+                    <img src="/static/images/history{% if code.version > 1 %}_f2{% endif %}.png" class="hasTip" width="16px" height="16px" alt="D" title="Ver Diferencias::visualiza las diferencias que se han ido insertando en el código." />
+                </a>
+                &nbsp;
+                <a href="{% url phas.views.codes.publish code.id %}">
+                    <img src="/static/images/publish_f2.png" class="hasTip" width="16px" height="16px" alt="P" title="Publicar::Configurar los parámetros del código." />
                 </a>
             </td>
 		</tr>

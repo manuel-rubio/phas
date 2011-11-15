@@ -1,6 +1,6 @@
 <?php
 
-include(__DIR__ . "/../lib/PHAS/Session/MongoSession.php");
+include(__DIR__ . "/../lib/PHAS/Session.php");
 
 $mongo_server = 'localhost';
 $session_expires = 2;

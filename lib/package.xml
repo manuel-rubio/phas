@@ -15,11 +15,11 @@
   <email>bombadil@bosqueviejo.net</email>
   <active>yes</active>
  </lead>
- <date>2011-11-10</date>
- <time>17:06:00</time>
+ <date>2011-11-15</date>
+ <time>19:32:00</time>
  <version>
-  <release>1.0.1</release>
-  <api>1.0.1</api>
+  <release>1.0.0</release>
+  <api>1.0.0</api>
  </version>
  <stability>
   <release>stable</release>
@@ -31,7 +31,6 @@
 	<dir name="/">
 		<dir name="PHAS">
 			<dir name="Backend">
-				<file name="BackendMongo.php" role="php" />
 				<file name="BackendSQL.php" role="php" />
                 <file name="IBackend.php" role="php" />
 			</dir>

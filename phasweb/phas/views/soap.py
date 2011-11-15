@@ -8,7 +8,7 @@ from django.core.paginator import Paginator, InvalidPage
 from datetime import *
 
 def index(request, page_id = 1):
-    tads = Paginator(TAD.objects.all(), 5)
+    tads = Paginator(TAD.objects.exclude(tad_type='S'), 5)
     page = tads.page(int(page_id))
     return render_to_response('soap/index.html', {
         'tads': page.object_list,
@@ -34,8 +34,8 @@ def edit(request, tad_id=None):
 			attr_name = request.POST.getlist('attr_name')
 			attr_tad = request.POST.getlist('attr_tad')
 			for i in range(0, len(attr_name)):
-				attrs.append([ 
-					attr_name[i], 
+				attrs.append([
+					attr_name[i],
 					int(attr_tad[i])
 				])
 			if form.is_valid():

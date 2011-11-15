@@ -8,26 +8,81 @@ from django.core.paginator import Paginator, InvalidPage
 from datetime import *
 from difflib import *
 
+def publish(request, code_id):
+    try:
+        code = Codes.objects.get(pk=code_id)
+        codever = CodeVersions.objects.filter(version=code.version, code__id=code_id)[0]
+        attrs = []
+        if request.method == 'POST':
+            form = CodesSOAPForm(request.POST, instance=code, auto_id=False)
+            formVer = CodeVersionsSOAPForm(request.POST, instance=codever, auto_id=False)
+            attr_name = request.POST.getlist('attr_name')
+            attr_tad = request.POST.getlist('attr_tad')
+            for i in range(0, len(attr_name)):
+                attrs.append([
+                    attr_name[i],
+                    int(attr_tad[i])
+                ])
+            if form.is_valid() and formVer.is_valid():
+                form.save()
+                formVer.save()
+                CodeAttrs.objects.filter(code__id=code_id).delete()
+                for i in range(0, len(attr_name)):
+                    a = CodeAttrs()
+                    a.name = attr_name[i]
+                    a.tad_id = int(attr_tad[i])
+                    a.code_id = code.id
+                    a.save()
+                return redirect('/code/')
+        else:
+            form = CodesSOAPForm(instance=code, auto_id=False)
+            formVer = CodeVersionsSOAPForm(instance=codever, auto_id=False)
+            a = CodeAttrs.objects.filter(code__id=code_id)
+            for i in range(0, len(a)):
+                attrs.append([
+                    a[i].name,
+                    a[i].tad_id
+                ])
+    except Codes.DoesNotExist:
+        raise Http404
+
+    tads = TAD.objects.all()
+    return render_to_response('codes/publish.html', {
+        'form': form,
+        'formVer': formVer,
+        'attrs': attrs,
+        'tads': tads,
+        'code': code,
+        'codever': codever,
+        'button': 'modifica',
+        'forms': [{
+            'id': 'code',
+            'name': 'Publicación'
+        }],
+        'titulo': 'Publica el Código',
+        'tipo': 'publish',
+    }, context_instance=RequestContext(request))
+
 def diff(request, code_id, src="0", dst="1"):
-	code = Codes.objects.get(pk=code_id)
-	codes = CodeVersions.objects.filter(code__id=code_id)
-	code1 = codes[int(src)].content.splitlines(1)
-	code2 = codes[int(dst)].content.splitlines(1)
-	diff = HtmlDiff()
-	diffs = diff.make_table(
-		code1, code2, 
-		codes[int(src)],
-		codes[int(dst)])
-	return render_to_response('codes/diff.html',{
-	    'titulo': 'Diferencias',
-	    'tipo': 'javascript',
-		'table_diff': diffs,
-		'total_diff': len(codes)-1,
-		'total_diff_list': range(0, len(codes)),
-		'src': int(src),
-		'dst': int(dst),
-		'code_id': int(code_id),
-	})
+    code = Codes.objects.get(pk=code_id)
+    codes = CodeVersions.objects.filter(code__id=code_id)
+    code1 = codes[int(src)].content.splitlines(1)
+    code2 = codes[int(dst)].content.splitlines(1)
+    diff = HtmlDiff()
+    diffs = diff.make_table(
+        code1, code2,
+        codes[int(src)],
+        codes[int(dst)])
+    return render_to_response('codes/diff.html',{
+        'titulo': 'Diferencias',
+        'tipo': 'javascript',
+        'table_diff': diffs,
+        'total_diff': len(codes)-1,
+        'total_diff_list': range(0, len(codes)),
+        'src': int(src),
+        'dst': int(dst),
+        'code_id': int(code_id),
+    })
 
 def index(request, page_id = 1):
     page = int(page_id)
@@ -50,9 +105,9 @@ def index(request, page_id = 1):
         'page_id': int(page_id),
         'titulo': 'Listado de Códigos',
         'tipo': 'javascript',
-		'module_id': int(module_id),
-		'modulos': Modules.objects.all(),
-		'filtro': True,
+        'module_id': int(module_id),
+        'modulos': Modules.objects.all(),
+        'filtro': True,
     })
 
 def edit(request, code_id=None):

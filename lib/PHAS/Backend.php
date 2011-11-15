@@ -2,7 +2,6 @@
 
 include_once(__DIR__ . '/Backend/IBackend.php');
 include_once(__DIR__ . '/Backend/BackendSQL.php');
-include_once(__DIR__ . '/Backend/BackendMongo.php');
 
 class Backend {
 	

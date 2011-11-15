@@ -12,7 +12,6 @@
 <thead>
     <tr>
 		<th nowrap="true">Nombre</th>
-		<th nowrap="true">¿Complejo?</th>
 		<th nowrap="true">Nombre XML</th>
 		<th nowrap="true">Atributos</th>
 		<th nowrap="true" colspan="2">Opciones</th>
@@ -37,7 +36,6 @@
     {% for tad in tads %}
         <tr class="{% cycle 'row0' 'row1' %}">
 			<td><a>{{ tad.name }}</a></td>
-			<td align="center"><a><img src="/static/images/{% if tad.tad_type != 'S' %}menu/icon-16-checkin{% else %}cancel_f2{% endif %}.png" width="16px" height="16px" /></a></td>
 			<td><a>{{ tad.xsd_name }}</a></td>
 			<td align="right"><a>{{ tad.tadattrs_set.count }}</a>&nbsp;</td>
             <td align="center">

@@ -13,7 +13,7 @@ class BackendSQL implements IBackend {
 	public function getCode( $code, $module ) {
 		return $this->conn->dql("
 	        SELECT v.content as code
-	        FROM phas_codes p 
+	        FROM phas_codes p
 			LEFT JOIN phas_modules m ON p.module_id = m.id
 			LEFT JOIN phas_codeversions v ON v.code_id = p.id
 	        WHERE m.name = ? AND p.name = ?
@@ -45,7 +45,7 @@ class BackendSQL implements IBackend {
 
     public function getMyTypes( $types ) {
         $raw = $this->conn->dql("
-            SELECT t.name, t.xsd_name, a.name AS attr_name, 
+            SELECT t.name, t.xsd_name, a.name AS attr_name,
                    d.name AS type, t.tad_type,
                    a.min_occurs, a.max_occurs
             FROM phas_TAD t
@@ -77,7 +77,7 @@ class BackendSQL implements IBackend {
     public function getFuncs( $module ) {
 		global $log;
         $sql = "
-            SELECT p.name AS module, a.name, p.doc, t.xsd_name as param_type, r.name as return_type
+            SELECT p.name AS module, a.name, p.doc, t.name as param_type, r.name as return_type
             FROM phas_codes p
             LEFT JOIN phas_CodeAttrs a ON p.id = a.code_id
             LEFT JOIN phas_TAD t ON t.id = a.tad_id
@@ -92,12 +92,17 @@ class BackendSQL implements IBackend {
         $funcs = array();
         if (is_array($funcs_raw) and count($funcs_raw) > 0) {
             foreach ($funcs_raw as $func) {
-                $funcs[$func['module']] = array(
-                    'params' => array (),
-                    'return' => 'xsd:string'
-                );
+                if (!isset($funcs[$func['module']])) {
+                    $funcs[$func['module']] = array(
+                        'params' => array (),
+                        'return' => 'xsd:string'
+                    );
+                }
                 if (!empty($func['name']) and !empty($func['param_type'])) {
-                    $funcs[$func['module']]['params'][$func['name']] = $func['param_type'];
+                    $funcs[$func['module']]['params'][] = array (
+                        'name' => $func['name'],
+                        'type' => $func['param_type']
+                    );
                 }
                 if (!empty($func['return_type'])) {
                     $funcs[$func['module']]['return'] = $func['return_type'];
