@@ -129,6 +129,7 @@ def edit(request, code_id=None):
                     codever.version += 1
                     codever.id = None
                 form.save()
+                codever.code_id = code.id
                 formVer.save()
                 return redirect('/code/')
         else:
