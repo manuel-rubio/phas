@@ -8,8 +8,9 @@ from phas.models import *
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        module = Modules.objects.get(name='test')
-        if not module:
+        try:
+            module = Modules.objects.get(name='test')
+        except Modules.DoesNotExist:
             module = Modules()
             module.name = 'test'
             module.save()
