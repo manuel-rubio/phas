@@ -17,6 +17,7 @@ class JS {
         $js->registerFunction('unserialize', 'php_unserialize');
         $js->registerFunction('json_encode', 'json_serialize');
         $js->registerFunction('json_decode', 'json_unserialize');
+        $js->registerFunction('iconv', 'iconv');
 
         $js->assign('logger', $log);
         $js->assign('PEAR_LOG_DEBUG', PEAR_LOG_DEBUG);
