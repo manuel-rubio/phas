@@ -7,6 +7,7 @@ include_once(__DIR__ . "/PHAS/Cache.php");
 include_once(__DIR__ . "/PHAS/DataAccess.php");
 include_once(__DIR__ . "/PHAS/Session.php");
 include_once(__DIR__ . "/PHAS/Request.php");
+include_once(__DIR__ . "/PHAS/Server.php");
 include_once(__DIR__ . "/PHAS/HTTP.php");
 include_once(__DIR__ . "/PHAS/Backend.php");
 include_once(__DIR__ . "/PHAS/WSDLGenerator.php");

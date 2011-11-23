@@ -8,6 +8,7 @@ class JS {
         $js = new JSContext();
         $js->assign('session', $session);
         $js->assign('request', new Request());
+        $js->assign('server', new Server());
 
         $js->registerClass('SoapCli');
         $js->registerClass('DataAccess');
