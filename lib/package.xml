@@ -46,6 +46,7 @@
 			<file name="HTTP.php" role="php" />
             <file name="JS.php" role="php" />
             <file name="Request.php" role="php" />
+            <file name="Server.php" role="php" />
 			<dir name="Session">
 				<file name="MemcacheSession.php" role="php" />
 				<file name="MongoSession.php" role="php" />
