@@ -81,7 +81,7 @@ class DataAccess {
         }
         $sth = $this->pdo->prepare($sql);
         if ($sth) {
-            if (!is_array($params) or count($p) == 0) {
+            if (count($p) == 0) {
                 $sth->execute();
             } else {
                 foreach ($p as $e) {
